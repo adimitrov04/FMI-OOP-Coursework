@@ -1,0 +1,7 @@
+*.zip
+**/build
+*.DS_Store
+*.txt
+*.log
+*.dat
+*.bin
