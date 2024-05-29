@@ -12,31 +12,25 @@ class Vector
 {
 
 public:
-    Vector();
+    Vector() noexcept;
     Vector(const size_t starting_capacity);
-    Vector(Vector<T> &&other);
+    Vector(Vector<T> &&other) noexcept;
     Vector(const Vector<T> &other);
 
-    ~Vector();
+    ~Vector() noexcept;
 
 public:
     Vector<T> &operator=(const Vector& other);
-    Vector<T> &operator=(Vector&& other);
+    Vector<T> &operator=(Vector&& other) noexcept;
     
-    T& operator[] (const size_t index);
-    const T& operator[] (const size_t index) const;
-
-    /* TODO: implement
-    friend std::ostream& operator<< (std::ostream& out, const Vector<T> &vec);
-    friend std::istream& operator>> (std::istream& in, Vector<T> &vec);
-    */
+    T& operator[] (const size_t index) noexcept;
+    const T& operator[] (const size_t index) const noexcept;
 
 public:
-    const size_t size () const;
-    const size_t capacity () const;
+    const size_t size () const noexcept;
+    const size_t capacity () const noexcept;
     T& at (const size_t index);
     const T& at (const size_t index) const;
-    void print (std::ostream& out = std::cout) const;
     
     void push_back (const T& element);
     void pop_back ();
@@ -47,7 +41,7 @@ public:
 
 private:
     void copy (const Vector<T> &other);
-    void move (Vector<T> &&other);
+    void move (Vector<T> &&other) noexcept;
 
 private:
     static const size_t DEFAULT_STARTING_CAPACITY = 4;

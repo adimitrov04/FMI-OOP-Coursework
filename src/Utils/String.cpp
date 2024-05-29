@@ -84,7 +84,7 @@ String string_utils::getCurrentWordInString (const char* &word)
 
 // ---- LIFECYCLE ----
 
-String::String()
+String::String() noexcept
 : size(0),
   arr(nullptr)
 {}
@@ -106,13 +106,13 @@ String::String (const String& other)
 : String(other.c_str())
 {}
 
-String::String (String&& other)
+String::String (String&& other) noexcept
 : String()
 {
     move(std::move(other));
 }
 
-String::~String()
+String::~String() noexcept
 {
     clear();
 }
@@ -127,7 +127,7 @@ String& String::operator= (const String& other)
     return *this;
 }
 
-String& String::operator= (String&& other)
+String& String::operator= (String&& other) noexcept
 {
     if (this != &other)
     {
@@ -159,17 +159,17 @@ String& String::operator+ (const char* str)
     return *this;
 }
 
-const bool String::operator== (const String& other) const
+const bool String::operator== (const String& other) const noexcept
 {
     return strcmp(this->c_str(), other.c_str()) == 0;
 }
 
-const bool String::operator== (const char* str) const
+const bool String::operator== (const char* str) const noexcept
 {
     return strcmp(this->c_str(), str) == 0;
 }
 
-std::ostream& operator<< (std::ostream& out, const String& str)
+std::ostream& operator<< (std::ostream& out, const String& str) noexcept
 {
     out << str.c_str();
 
@@ -183,24 +183,14 @@ std::istream& operator>> (std::istream& in, String& str)
     return in;
 }
 
-// ---- CASTS ----
-
-String::operator char*() const
-{
-    char* output = new char[this->size];
-    strcpy(output, this->c_str());
-
-    return output;
-}
-
 // ---- GETTERS ----
 
-const size_t String::get_length () const
+const size_t String::get_length () const noexcept
 {
     return strlen(arr);
 }
 
-const char* String::c_str () const
+const char* String::c_str () const noexcept
 {
     return arr;
 }
@@ -223,7 +213,7 @@ Vector<String> String::extract_words () const
 }
 
 
-void String::print (std::ostream& out) const
+void String::print (std::ostream& out) const noexcept
 {
     if (arr == nullptr)
         out << "null";
@@ -323,9 +313,10 @@ void String::clear () noexcept
 
 // ---- PRIVATE ----
 
-void String::move (String&& other)
+void String::move (String&& other) noexcept
 {
     size = other.size;
+    other.size = 0;
 
     arr = other.arr;
     other.arr = nullptr;

@@ -1,7 +1,7 @@
 // ---- LIFECYCLE ----
 
 template <typename T>
-Vector<T>::Vector()
+Vector<T>::Vector() noexcept
 : f_capacity(0), f_size(0), arr(nullptr)
 {}
 
@@ -13,7 +13,7 @@ Vector<T>::Vector(const size_t starting_capacity)
 }
 
 template <typename T>
-Vector<T>::Vector(Vector<T> &&other)
+Vector<T>::Vector(Vector<T> &&other) noexcept
 : Vector<T>()
 {
     move(std::move(other));
@@ -27,7 +27,7 @@ Vector<T>::Vector(const Vector<T> &other)
 }
 
 template <typename T>
-Vector<T>::~Vector()
+Vector<T>::~Vector() noexcept
 {
     delete[] arr;
 }
@@ -44,7 +44,7 @@ Vector<T>& Vector<T>::operator=(const Vector& other)
 }
 
 template <typename T>
-Vector<T>& Vector<T>::operator=(Vector&& other)
+Vector<T>& Vector<T>::operator=(Vector&& other) noexcept
 {
     if (this != &other)
     {
@@ -55,13 +55,13 @@ Vector<T>& Vector<T>::operator=(Vector&& other)
 }
 
 template <typename T>
-T& Vector<T>::operator[] (const size_t index)
+T& Vector<T>::operator[] (const size_t index) noexcept
 {
     return arr[index];
 }
 
 template <typename T>
-const T& Vector<T>::operator[] (const size_t index) const
+const T& Vector<T>::operator[] (const size_t index) const noexcept
 {
     return arr[index];
 }
@@ -69,13 +69,13 @@ const T& Vector<T>::operator[] (const size_t index) const
 // ---- METHODS ----
 
 template <typename T>
-const size_t Vector<T>::size () const
+const size_t Vector<T>::size () const noexcept
 {
     return f_size;
 }
 
 template <typename T>
-const size_t Vector<T>::capacity () const
+const size_t Vector<T>::capacity () const noexcept
 {
     return f_capacity;
 }
@@ -102,15 +102,6 @@ const T& Vector<T>::at (const size_t index) const
         throw std::invalid_argument("Vector.at: Given index outside of vector.");
 
     return arr[index];
-}
-
-template <typename T>
-void Vector<T>::print (std::ostream& out) const
-{
-    for (size_t i = 0; i < size(); i++)
-    {
-        out << arr[i] << ' ';
-    }
 }
 
 template <typename T>
@@ -204,11 +195,14 @@ void Vector<T>::copy (const Vector<T> &other)
 }
 
 template <typename T>
-void Vector<T>::move (Vector<T> &&other)
+void Vector<T>::move (Vector<T> &&other) noexcept
 {
     this->arr = other.arr;
     other.arr = nullptr;
 
-    f_capacity = other.capacity();
-    f_size = other.size();
+    f_capacity = other.f_capacity;
+    other.f_capacity = 0;
+
+    f_size = other.f_size;
+    other.f_size = 0;
 }
