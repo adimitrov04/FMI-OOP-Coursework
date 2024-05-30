@@ -85,8 +85,7 @@ String string_utils::getCurrentWordInString (const char* &word)
 // ---- LIFECYCLE ----
 
 String::String() noexcept
-: size(0),
-  arr(nullptr)
+: size(0), arr(nullptr)
 {}
 
 String::String (const char* str)
@@ -103,8 +102,17 @@ String::String (const char* str)
 }
 
 String::String (const String& other)
-: String(other.c_str())
-{}
+: String()
+{
+    if (other.size == 0)
+        return;
+
+    char* buffer = new char[other.size];
+    strcpy(buffer, other.c_str());
+
+    arr = buffer;
+    size = other.size;
+}
 
 String::String (String&& other) noexcept
 : String()
@@ -297,7 +305,7 @@ void String::copy (const char* str)
         clear();
 
     arr = buffer;
-    size = strlen(str) + 1;
+    size = len + 1;
 }
 
 void String::copy (const String& other)
