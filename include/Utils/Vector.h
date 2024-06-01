@@ -23,8 +23,8 @@ public:
     Vector<T> &operator=(const Vector& other);
     Vector<T> &operator=(Vector&& other) noexcept;
     
-    T& operator[] (const size_t index) noexcept;
-    const T& operator[] (const size_t index) const noexcept;
+    T& operator[] (const size_t index);
+    const T& operator[] (const size_t index) const;
 
 public:
     const size_t size () const noexcept;

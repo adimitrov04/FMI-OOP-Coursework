@@ -55,13 +55,13 @@ Vector<T>& Vector<T>::operator=(Vector&& other) noexcept
 }
 
 template <typename T>
-T& Vector<T>::operator[] (const size_t index) noexcept
+T& Vector<T>::operator[] (const size_t index)
 {
     return arr[index];
 }
 
 template <typename T>
-const T& Vector<T>::operator[] (const size_t index) const noexcept
+const T& Vector<T>::operator[] (const size_t index) const
 {
     return arr[index];
 }
