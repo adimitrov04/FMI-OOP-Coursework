@@ -9,6 +9,8 @@
 
 class String
 {
+public:
+    static const size_t MAX_BUFFER_LENGTH = 100000;
 
 public:
     String () noexcept;
@@ -26,14 +28,15 @@ public:
     String& operator+ (const String& other);
     String& operator+ (const char* str);
 
-    const bool operator== (const String& other) const noexcept;
-    const bool operator== (const char* str) const noexcept;
+    const bool operator== (const String& other) const;
+    const bool operator== (const char* str) const;
 
     friend std::ostream& operator<< (std::ostream& out, const String& str) noexcept;
     friend std::istream& operator>> (std::istream& in, String& str);
 
 public:
-    const size_t get_length () const noexcept;
+
+    const size_t length () const noexcept;
     const char* c_str () const noexcept;
     Vector<String> extract_words () const;
     void print (std::ostream& out = std::cout) const noexcept;
@@ -51,8 +54,6 @@ private:
     void move (String&& other) noexcept;
 
 private:
-    static const size_t MAX_BUFFER_LENGTH = 100000;
-
     size_t size;
     char* arr;
 
@@ -61,6 +62,10 @@ private:
 namespace string_utils
 {
     const bool isnewline (const char ch);
+    const size_t strlen (const char* str, const size_t LIMIT = String::MAX_BUFFER_LENGTH);
+    const int strcmp (const char* str1, const char* str2);
+    const int strcasecmp (const char* str1, const char* str2);
+
     String getCurrentWordInString (const char* &word);
     const char* findNextWord (const char* currentPosition);
     const size_t getCurrentWordLength (const char* word);

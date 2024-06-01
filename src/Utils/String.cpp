@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstddef>
 #include <stdexcept>
+
+#include <cmath>
 #include <cstring>
 
 #include "../../include/Utils/String.h"
@@ -15,6 +17,90 @@ const bool string_utils::isnewline (const char ch)
         return true;
 
     return false;
+}
+
+/**
+ * Safe strlen implementation - combines checks of strnlen and checks if str is nullptr.
+ * 
+ * @param LIMIT the length limit, won't check past this point.
+ * 
+ * @return The length of the cstring up to the null-termination character;
+ * @return (LIMIT + 1) if the cstring is not null-terminated
+ */
+const size_t string_utils::strlen (const char* str, const size_t LEN_LIMIT)
+{
+    if (!str)
+        return 0;
+
+    size_t len(0);
+    while (*str && len <= LEN_LIMIT)
+    {
+        len++;
+        str++;    
+    }
+
+    return len;
+}
+
+/**
+ * Safe strcmp implementation - checks if str1, str2 are nullptr and whether they are terminated.
+ * 
+ * @throws std::invalid_argument if either str1 or str2 is not a valid, null-terminated cstring
+ * 
+ * @return The length of the cstring up to the null-termination character;
+ * @return (LIMIT + 1) if the cstring is not null-terminated
+ */
+const int string_utils::strcmp (const char* str1, const char* str2)
+{
+    if (!str1 || !str2)
+        throw std::invalid_argument("strcmp: Cannot compare nullptrs.");
+
+    if (strlen(str1) == String::MAX_BUFFER_LENGTH || strlen(str2) == String::MAX_BUFFER_LENGTH)
+        throw std::invalid_argument("strcmp: Argument cstrings are not null-terminated.");
+
+    int diff(0);
+    while (*str1 && *str2)
+    {
+        if (*str1 != *str2)
+        {
+            diff = *str1 - *str2;
+            break;
+        }
+
+        str1++;
+        str2++;
+    }
+
+    return diff;
+}
+
+const int string_utils::strcasecmp (const char* str1, const char* str2)
+{
+    if (!str1 || !str2)
+        throw std::invalid_argument("strcasecmp: Cannot compare nullptrs.");
+
+    if (strlen(str1) == String::MAX_BUFFER_LENGTH || strlen(str2) == String::MAX_BUFFER_LENGTH)
+        throw std::invalid_argument("strcasecmp: Argument cstrings are not null-terminated.");
+
+    const int CASE_DIFF = 'a' - 'A';
+
+    int diff(0);
+    while (*str1 && *str2)
+    {
+        if (*str1 != *str2)
+        {
+            if (!isalpha(*str1) || !isalpha(*str2) || std::abs(*str1 - *str2) != CASE_DIFF)
+            {
+                diff = (*str1 - *str2);
+                break;
+            }
+        }
+
+        str1++;
+        str2++;
+    }
+
+    return diff;
 }
 
 void string_utils::copyWord (char* dest, const char* &src)
@@ -91,8 +177,8 @@ String::String() noexcept
 String::String (const char* str)
 : String()
 {
-    size_t len = strnlen(str, MAX_BUFFER_LENGTH);
-    if (!len || len == MAX_BUFFER_LENGTH)
+    size_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
+    if (!len || len > MAX_BUFFER_LENGTH)
         throw std::invalid_argument("String.ctor: Cstring argument is not null-terminated or is nullptr.");
 
     size = len + 1;
@@ -167,14 +253,14 @@ String& String::operator+ (const char* str)
     return *this;
 }
 
-const bool String::operator== (const String& other) const noexcept
+const bool String::operator== (const String& other) const
 {
-    return strcmp(this->c_str(), other.c_str()) == 0;
+    return (string_utils::strcmp(this->c_str(), other.c_str()) == 0);
 }
 
-const bool String::operator== (const char* str) const noexcept
+const bool String::operator== (const char* str) const
 {
-    return strcmp(this->c_str(), str) == 0;
+    return (string_utils::strcmp(this->c_str(), str) == 0);
 }
 
 std::ostream& operator<< (std::ostream& out, const String& str) noexcept
@@ -193,9 +279,9 @@ std::istream& operator>> (std::istream& in, String& str)
 
 // ---- GETTERS ----
 
-const size_t String::get_length () const noexcept
+const size_t String::length () const noexcept
 {
-    return strlen(arr);
+    return string_utils::strlen(arr);
 }
 
 const char* String::c_str () const noexcept
@@ -233,8 +319,8 @@ void String::print (std::ostream& out) const noexcept
 
 void String::cat (const char* str)
 {
-    size_t len = strnlen(str, MAX_BUFFER_LENGTH);
-    if (!len || len == MAX_BUFFER_LENGTH)
+    size_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
+    if (!len || len > MAX_BUFFER_LENGTH)
         throw std::invalid_argument("String.cat: Cstring argument is not null-terminated or is nullptr.");
 
     size_t newSize = this->size + len;
@@ -294,8 +380,8 @@ void String::read (std::istream& in)
 
 void String::copy (const char* str)
 {
-    size_t len = strnlen(str, MAX_BUFFER_LENGTH);
-    if (!len || len == MAX_BUFFER_LENGTH)
+    size_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
+    if (!len || len > MAX_BUFFER_LENGTH)
         throw std::invalid_argument("String.copy: Cstring argument is not null-terminated or is nullptr.");
 
     char* buffer = new char[len + 1];
