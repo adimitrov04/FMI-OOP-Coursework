@@ -46,6 +46,7 @@ private:
 private:
     static const size_t DEFAULT_STARTING_CAPACITY = 4;
     
+    // RESOLVE POTENTIAL SERIALIZATION ISSUES
     size_t f_capacity;
     size_t f_size;
 
