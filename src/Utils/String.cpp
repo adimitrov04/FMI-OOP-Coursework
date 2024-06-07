@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include <cmath>
+#include <fstream>
 #include <cstring>
 
 #include "../../include/Utils/String.h"
@@ -376,6 +377,46 @@ void String::read (std::istream& in)
     }
 
     delete[] buffer;
+}
+
+void String::serialize (std::fstream& file) const
+{
+    if (size == 0 || arr == nullptr)
+        throw std::invalid_argument("String.serialize: Cannot write empty cstring.");
+    
+    file.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    file.write(arr, size);
+}
+
+void String::deserialize (std::fstream& file)
+{
+    if (!file)
+        std::runtime_error("String.deserialize: Input file is not in good state");
+
+    if (arr)
+        clear();
+
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+
+    if (file)
+    {
+        try
+        {
+            arr = new char[size];
+            file.read(arr, size);
+        }
+        catch (std::bad_alloc&)
+        {
+            size = 0;
+            throw std::runtime_error("String.deserialize: Could not allocate memory.");
+        }
+    }
+
+    if (!file)
+    {
+        clear();
+        throw std::runtime_error("String.deserialize: Reading from file failed.");
+    }
 }
 
 void String::copy (const char* str)

@@ -4,6 +4,7 @@
 #define __STRING_H__
 
 #include <iostream>
+#include <fstream>
 
 #include "Vector.h"
 
@@ -49,6 +50,8 @@ public:
     void clear () noexcept;
 
     void read (std::istream& in = std::cin);
+    void serialize (std::fstream& file) const;
+    void deserialize (std::fstream& file);
 
 private:
     void move (String&& other) noexcept;
