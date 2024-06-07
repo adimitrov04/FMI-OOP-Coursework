@@ -1,6 +1,8 @@
 #include "../../include/SNWKFormat/snwk_format.h"
 #include "../../include/SNWKFormat/snwk_exceptions.h"
 
+// TODO: IMPLEMENT EXCEPTIONS
+
 using namespace snwk;
 
 const FourCC FILE_HEADER::FORMAT_HANDLE = {'s', 'n', 'w', 'k'};
@@ -178,5 +180,5 @@ void FILE_HEADER::validate_type (std::fstream& file) const
     FourCC arg(file);
 
     if (arg != RECORD_TYPE_SPECIFIER)
-        throw /*snwkexcept::type_mismatch*/std::runtime_error("SNWK.open: Objects in given file are not of the specified type.");
+        throw std::runtime_error("SNWK.open: Objects in given file are not of the specified type.");
 }

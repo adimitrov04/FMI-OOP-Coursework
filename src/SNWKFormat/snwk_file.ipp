@@ -1,4 +1,3 @@
-using namespace snwk;
 
 // ---- LIFECYCLE ----
 
