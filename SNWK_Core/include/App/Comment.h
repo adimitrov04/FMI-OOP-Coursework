@@ -8,7 +8,7 @@
 
 #include "User.h"
 
-class Comment : public IScoreable
+class Comment : public ISerializeable, public IScoreable
 {
 
 public:
@@ -16,7 +16,8 @@ public:
     ~Comment();
 
 public:
-
+    virtual void Serialize (std::fstream& file) const override;
+    virtual void Deserialize (std::fstream& file) override;
 
 private:
     const User& author;
