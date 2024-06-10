@@ -408,7 +408,7 @@ void String::deserialize (std::fstream& file)
         catch (std::bad_alloc&)
         {
             size = 0;
-            throw std::runtime_error("String.deserialize: Could not allocate memory.");
+            throw std::runtime_error("String.deserialize: Could not allocate memory (possible file corruption).");
         }
     }
 
