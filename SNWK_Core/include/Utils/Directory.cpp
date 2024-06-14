@@ -4,9 +4,8 @@
 #include "Directory.h"
 
 // Check user environment in order to ensure proper list command is used.
-const String LIST_COMM = getenv("windir") ? "dir " : "ls 2>/dev/null ";
-
-const String MAKE_COMM = "mkdir 2>/dev/null ";
+const String LIST_COMM = getenv("windir") ? "dir 1> NUL 2>&1 " : "ls >/dev/null 2>/dev/null ";
+const String MAKE_COMM = getenv("windir") ? "mkdir 1> NUL 2>&1 " : "mkdir >/dev/null 2>dev/null ";
 
 bool dir::dir_exists (const char* path) noexcept
 {

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstddef>
 #include <stdexcept>
+#include <limits>
 
 #include <cmath>
 #include <fstream>
