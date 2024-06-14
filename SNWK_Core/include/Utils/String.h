@@ -27,7 +27,9 @@ public:
     String& operator= (const char* other);
 
     String& operator+ (const String& other);
+    String operator+ (const String& other) const;
     String& operator+ (const char* str);
+    String operator+ (const char* str) const;
 
     const bool operator== (const String& other) const;
     const bool operator== (const char* str) const;
