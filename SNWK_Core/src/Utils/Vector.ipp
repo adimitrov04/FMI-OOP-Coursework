@@ -6,7 +6,7 @@ Vector<T>::Vector() noexcept
 {}
 
 template <typename T>
-Vector<T>::Vector(const size_t starting_capacity)
+Vector<T>::Vector(const int64_t starting_capacity)
 : Vector<T>()
 {
     reserve(starting_capacity);
@@ -55,13 +55,13 @@ Vector<T>& Vector<T>::operator=(Vector&& other) noexcept
 }
 
 template <typename T>
-T& Vector<T>::operator[] (const size_t index)
+T& Vector<T>::operator[] (const int64_t index)
 {
     return arr[index];
 }
 
 template <typename T>
-const T& Vector<T>::operator[] (const size_t index) const
+const T& Vector<T>::operator[] (const int64_t index) const
 {
     return arr[index];
 }
@@ -69,19 +69,19 @@ const T& Vector<T>::operator[] (const size_t index) const
 // ---- METHODS ----
 
 template <typename T>
-const size_t Vector<T>::size () const noexcept
+const int64_t Vector<T>::size () const noexcept
 {
     return f_size;
 }
 
 template <typename T>
-const size_t Vector<T>::capacity () const noexcept
+const int64_t Vector<T>::capacity () const noexcept
 {
     return f_capacity;
 }
 
 template <typename T>
-T& Vector<T>::at (const size_t index)
+T& Vector<T>::at (const int64_t index)
 {
     if (size() == 0 || arr == nullptr)
         throw std::logic_error("Vector.at: Array is empty.");
@@ -93,7 +93,7 @@ T& Vector<T>::at (const size_t index)
 }
 
 template <typename T>
-const T& Vector<T>::at (const size_t index) const
+const T& Vector<T>::at (const int64_t index) const
 {
     if (size() == 0 || arr == nullptr)
         throw std::logic_error("Vector.at: Array is empty.");
@@ -102,6 +102,28 @@ const T& Vector<T>::at (const size_t index) const
         throw std::invalid_argument("Vector.at: Given index outside of vector.");
 
     return arr[index];
+}
+
+template <typename T>
+int64_t Vector<T>::binary_search (const T& search_arg) const noexcept
+{
+    int64_t lowLim = 0;
+    int64_t upLim = f_size - 1;
+
+    while (lowLim <= upLim)
+    {
+        int64_t middle = (lowLim + upLim) / 2;
+        if (arr[middle] == search_arg)
+            return middle;
+
+        if (search_arg > arr[middle])
+            lowLim = middle + 1;
+
+        if (search_arg < arr[middle])
+            upLim = middle - 1;
+    }
+
+    return -1;
 }
 
 template <typename T>
@@ -124,7 +146,7 @@ void Vector<T>::pop_back ()
 }
 
 template <typename T>
-void Vector<T>::reserve (const size_t capacity)
+void Vector<T>::reserve (const int64_t capacity)
 {
     if (capacity <= this->capacity())
         return;
@@ -133,7 +155,7 @@ void Vector<T>::reserve (const size_t capacity)
 
     try
     {
-        for (size_t i = 0; i < size(); i++)
+        for (int64_t i = 0; i < size(); i++)
             buffer[i] = arr[i];
     }
     catch (...)
@@ -161,7 +183,7 @@ void Vector<T>::append (const Vector<T> &other)
 
     reserve(this->size() + other.size());
 
-    for (size_t i = 0; i < other.size(); i++)
+    for (int64_t i = 0; i < other.size(); i++)
     {
         push_back(other[i]);
     }
@@ -183,7 +205,7 @@ void Vector<T>::copy (const Vector<T> &other)
     Vector<T> buffer;
     buffer.reserve(other.capacity());
     
-    for (size_t i = 0; i < other.f_size; i++)
+    for (int64_t i = 0; i < other.f_size; i++)
         buffer.push_back(other[i]);
 
     this->clear();
