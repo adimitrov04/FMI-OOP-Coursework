@@ -8,6 +8,8 @@
 #include <utility>
 #include <stdexcept>
 
+#include "Sort.h"
+
 template <typename T>
 class Vector
 {
@@ -33,11 +35,15 @@ public:
     T& at (const int64_t index);
     const T& at (const int64_t index) const;
     int64_t binary_search (const T& search_arg) const noexcept;
+    bool is_sorted () const noexcept;
     
     void push_back (const T& element);
     void pop_back ();
     void reserve (const int64_t capacity);
     void append (const Vector<T> &other);
+
+    template <typename SortAlgorithm = void(T*, uint64_t)>
+    void sort (const SortAlgorithm& sorter = sort::quicksort<T>);
 
     void clear () noexcept;
 

@@ -112,7 +112,7 @@ int64_t Vector<T>::binary_search (const T& search_arg) const noexcept
 
     while (lowLim <= upLim)
     {
-        int64_t middle = (lowLim + upLim) / 2;
+        int64_t middle = lowLim + ((upLim - lowLim) / 2);
         if (arr[middle] == search_arg)
             return middle;
 
@@ -124,6 +124,12 @@ int64_t Vector<T>::binary_search (const T& search_arg) const noexcept
     }
 
     return -1;
+}
+
+template <typename T>
+bool Vector<T>::is_sorted () const noexcept
+{
+    return sort::is_sorted(arr, f_size);
 }
 
 template <typename T>
@@ -187,6 +193,13 @@ void Vector<T>::append (const Vector<T> &other)
     {
         push_back(other[i]);
     }
+}
+
+template <typename T>
+template <typename SortAlgorithm>
+void Vector<T>::sort (const SortAlgorithm& sorter)
+{
+    sorter(arr, f_size);
 }
 
 template <typename T>
