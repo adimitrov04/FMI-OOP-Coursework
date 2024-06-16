@@ -49,8 +49,8 @@ const size_t string_utils::strlen (const char* str, const size_t LEN_LIMIT)
  * 
  * @throws std::invalid_argument if either str1 or str2 is not a valid, null-terminated cstring
  * 
- * @return The length of the cstring up to the null-termination character;
- * @return (LIMIT + 1) if the cstring is not null-terminated
+ * @return The numerical difference between the first different character
+ * encountered in str2 relative to str1
  */
 const int string_utils::strcmp (const char* str1, const char* str2)
 {
@@ -272,14 +272,54 @@ String String::operator+ (const char* str) const
     return result;
 }
 
-const bool String::operator== (const String& other) const
-{
-    return (string_utils::strcmp(this->c_str(), other.c_str()) == 0);
-}
-
-const bool String::operator== (const char* str) const
+bool String::operator== (const char* str) const
 {
     return (string_utils::strcmp(this->c_str(), str) == 0);
+}
+
+bool String::operator== (const String& other) const
+{
+    return *this == other.c_str();
+}
+
+bool String::operator> (const char* other) const
+{
+    return (string_utils::strcasecmp(this->c_str(), other) > 0);
+}
+
+bool String::operator> (const String& other) const
+{
+    return *this > other.c_str();
+}
+
+bool String::operator< (const char* other) const
+{
+    return (string_utils::strcasecmp(this->c_str(), other) < 0);
+}
+
+bool String::operator< (const String& other) const
+{
+    return *this < other.c_str();
+}
+
+bool String::operator>= (const char* other) const
+{
+    return (*this > other) || (*this == other);
+}
+
+bool String::operator<= (const char* other) const
+{
+    return (*this < other) || (*this == other);
+}
+
+bool String::operator>= (const String& other) const
+{
+    return (*this > other) || (*this == other);
+}
+
+bool String::operator<= (const String& other) const
+{
+    return (*this < other) || (*this == other);
 }
 
 std::ostream& operator<< (std::ostream& out, const String& str) noexcept

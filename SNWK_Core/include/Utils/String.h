@@ -31,8 +31,20 @@ public:
     String& operator+ (const char* str);
     String operator+ (const char* str) const;
 
-    const bool operator== (const String& other) const;
-    const bool operator== (const char* str) const;
+    bool operator== (const char* str) const;
+    bool operator== (const String& other) const;
+
+    bool operator> (const char* other) const;
+    bool operator> (const String& other) const;
+    
+    bool operator< (const char* other) const;
+    bool operator< (const String& other) const;
+
+    bool operator>= (const char* other) const;
+    bool operator>= (const String& other) const;
+    
+    bool operator<= (const char* other) const;
+    bool operator<= (const String& other) const;
 
     friend std::ostream& operator<< (std::ostream& out, const String& str) noexcept;
     friend std::istream& operator>> (std::istream& in, String& str);
