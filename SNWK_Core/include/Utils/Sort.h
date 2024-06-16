@@ -117,7 +117,7 @@ void quicksort (T* arr, uint64_t size)
 }
 
 template <typename T>
-bool is_sorted (const T* arr, uint16_t size)
+bool is_sorted (const T* arr, uint64_t size)
 {
     for (uint64_t i = 1; i < size; i++)
     {

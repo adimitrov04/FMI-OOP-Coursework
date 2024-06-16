@@ -16,7 +16,7 @@ class Vector
 
 public:
     Vector() noexcept;
-    Vector(const int64_t starting_capacity);
+    Vector(const uint64_t starting_capacity);
     Vector(Vector<T> &&other) noexcept;
     Vector(const Vector<T> &other);
 
@@ -26,20 +26,21 @@ public:
     Vector<T> &operator=(const Vector& other);
     Vector<T> &operator=(Vector&& other) noexcept;
     
-    T& operator[] (const int64_t index);
-    const T& operator[] (const int64_t index) const;
+    T& operator[] (const uint64_t index);
+    const T& operator[] (const uint64_t index) const;
 
 public:
-    const int64_t size () const noexcept;
-    const int64_t capacity () const noexcept;
-    T& at (const int64_t index);
-    const T& at (const int64_t index) const;
-    int64_t binary_search (const T& search_arg) const noexcept;
+    const uint64_t size () const noexcept;
+    const uint64_t capacity () const noexcept;
+    T& at (const uint64_t index);
+    const T& at (const uint64_t index) const;
+    T* binary_search (T& search_arg) const noexcept;
     bool is_sorted () const noexcept;
     
     void push_back (const T& element);
+    void push_sorted (const T& element);
     void pop_back ();
-    void reserve (const int64_t capacity);
+    void reserve (const uint64_t capacity);
     void append (const Vector<T> &other);
 
     template <typename SortAlgorithm = void(T*, uint64_t)>
@@ -52,10 +53,10 @@ private:
     void move (Vector<T> &&other) noexcept;
 
 private:
-    static const int64_t DEFAULT_STARTING_CAPACITY = 4;
+    static const uint64_t DEFAULT_STARTING_CAPACITY = 4;
     
-    int64_t f_capacity;
-    int64_t f_size;
+    uint64_t f_capacity;
+    uint64_t f_size;
 
     T* arr;
 
