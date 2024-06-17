@@ -10,8 +10,8 @@
 
 // Check whether windir evironment variable is defined in order to ensure
 // that proper commantds are used.
-static const String LIST_COMM = getenv("windir") ? "dir 1> NUL 2>&1 " : "ls >/dev/null 2>/dev/null ";
-static const String MAKE_COMM = getenv("windir") ? "mkdir 1> NUL 2>&1 " : "mkdir >/dev/null 2>dev/null ";
+static const String LIST_COMM = getenv("windir") ? "dir 1> NUL 2>&1 " : "ls >/dev/null 2>&1 ";
+static const String MAKE_COMM = getenv("windir") ? "mkdir 1> NUL 2>&1 " : "mkdir >/dev/null 2>&1 ";
 
 namespace dir
 {
