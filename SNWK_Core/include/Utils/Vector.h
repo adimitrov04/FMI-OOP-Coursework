@@ -34,12 +34,15 @@ public:
     const uint64_t capacity () const noexcept;
     T& at (const uint64_t index);
     const T& at (const uint64_t index) const;
+    T* front () const;
+    T* back () const;
     T* binary_search (T& search_arg) const noexcept;
     bool is_sorted () const noexcept;
     
     void push_back (const T& element);
     void push_sorted (const T& element);
     void pop_back ();
+    void pop (const uint64_t index);
     void reserve (const uint64_t capacity);
     void append (const Vector<T> &other);
 

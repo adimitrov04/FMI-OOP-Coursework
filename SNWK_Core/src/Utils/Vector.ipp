@@ -104,6 +104,24 @@ const T& Vector<T>::at (const uint64_t index) const
     return arr[index];
 }
 
+template <typename T>
+T* Vector<T>::front () const
+{
+    if (!arr)
+        throw std::domain_error("Vector.front: Cannot get element since vector is empty.");
+
+    return arr;
+}
+
+template <typename T>
+T* Vector<T>::back () const
+{
+    if (!arr)
+        throw std::domain_error("Vector.back: Cannot get element since vector is empty.");
+
+    return arr + (f_size - 1);
+}
+
 /**
  * @param search_arg The element to look for, passed by value
  * 
@@ -174,6 +192,15 @@ void Vector<T>::push_sorted (const T& element)
 template <typename T>
 void Vector<T>::pop_back ()
 {
+    f_size--;
+}
+
+template <typename T>
+void Vector<T>::pop (const uint64_t index)
+{
+    for (uint64_t i = index; i < (f_size - 1); i++)
+        arr[i] = arr[i + 1];
+
     f_size--;
 }
 
