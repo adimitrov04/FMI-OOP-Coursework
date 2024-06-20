@@ -32,9 +32,9 @@ public:
 public:
     int32_t GetScore () const;
 
-    void Upvote (const User& voter, User& author);
-    void Downvote (const User& voter, User& author);
-    void Unvote (const User& voter, User& author);
+    virtual void Upvote (const User& voter, User& author);
+    virtual void Downvote (const User& voter, User& author);
+    virtual void Unvote (const User& voter, User& author);
 
     void serialize (std::fstream& file) const;
     void deserialize (std::fstream& file);

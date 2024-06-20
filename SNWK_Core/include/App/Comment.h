@@ -6,21 +6,22 @@
 #include <cstdint>
 
 #include "../Utils/String.h"
+#include "../SNWKFormat/snwk_format.h"
 
 #include "Interfaces/AppElement.h"
 #include "Interfaces/ISerializeable.h"
 #include "VoteableObject.h"
 
 #include "User.h"
-#include "Post.h"
+//#include "Post.h"
 
-class Comment : public AppElement, public ISerializeable, public virtual VoteableObject
+class Comment : public AppElement, public virtual VoteableObject
 {
 
 public:
     Comment();
-    Comment(const uint32_t setID, const User& setAuthor, const String& setContent,
-            const Post& setParent, const uint32_t setReply);
+    Comment(uint32_t setThreadID, uint32_t setPostID, uint32_t setID,
+            uint32_t setAuthorID, const String& setContent, uint32_t setReplyID);
     
     ~Comment() = default;
 
@@ -28,24 +29,41 @@ public:
     Comment& operator= (const Comment& other);
 
 public:
-    const String& GetContent () const;
-    User& GetAuthor () const;
-    uint32_t GetID () const;
-    uint32_t GetParentPostID () const;
-    uint32_t GetReplyID () const;
+    const String& GetContent () const noexcept;
+    uint32_t GetAuthorID () const noexcept;
+    uint32_t GetID () const noexcept;
+    uint32_t GetParentThreadID () const noexcept;
+    uint32_t GetParentPostID () const noexcept;
+    uint32_t GetReplyID () const noexcept;
+    
+    void SetID (const uint32_t id);
+    void SetContent (const String& text);
+
+    virtual void Upvote (const User& voter, User& author) override;
+    virtual void Downvote (const User& voter, User& author) override;
+    virtual void Unvote (const User& voter, User& author) override;
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
 
-    virtual void DeleteObject () override;
+    using AppElement::DeleteObject;
+
+public:
+    static const snwk::FourCC TYPE_FCC;
+    static const String VOTE_TABLE_DIR;
 
 private:
-    uint32_t comment_id;
-    uint32_t parent_post_id;
+    String generate_vote_table_filename() const;
 
-    User& author;
-    String content;
+private:
+    uint32_t parent_thread_id;
+    uint32_t parent_post_id;
+    uint32_t comment_id;
+
+    uint32_t author_id;
     uint32_t replying_to_id;
+
+    String content;
 
 };
 

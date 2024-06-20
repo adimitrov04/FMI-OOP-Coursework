@@ -78,6 +78,10 @@ void VoteableObject::vote (vote_values val, const User& voter, User& author)
     if (vote_table.GetEntryCount() > 0)
         currentUserEntry = vote_table.FindEntry(voter.GetID());
 
+    // Safeguard just in case
+    if (voter.IsDeleted())
+        throw std::invalid_argument("Vote: Given user cannot vote since they are deleted.");
+
     if (currentUserEntry == nullptr)
     {
         if (val == none)

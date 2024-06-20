@@ -8,7 +8,7 @@
 
 #include "App/User.h"
 
-//#include "SNWK_Core/include/App/Comment.h"
+#include "App/Comment.h"
 //#include "SNWK_Core/include/App/Post.h"
 //#include "SNWK_Core/include/App/Thread.h"
 

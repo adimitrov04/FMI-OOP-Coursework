@@ -136,11 +136,11 @@ void User::Serialize (std::fstream& file) const
     file.write(reinterpret_cast<const char*>(&adminbyte), sizeof(adminbyte));
     check_file_state(file);
     
-    std::clog << username << '\n';
+    //std::clog << username << '\n';
     username.serialize(file);
     check_file_state(file);
 
-    std::clog << password << '\n';
+    //std::clog << password << '\n';
     password.serialize(file);
     check_file_state(file);
 
