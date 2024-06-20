@@ -1,10 +1,11 @@
 #include <iostream>
-#include <cstddef>
+#include <cstdint>
 #include <stdexcept>
 #include <limits>
 
 #include <cmath>
 #include <fstream>
+#include <utility>
 #include <cstring>
 
 #include "../../include/Utils/String.h"
@@ -29,12 +30,12 @@ const bool string_utils::isnewline (const char ch)
  * @return The length of the cstring up to the null-termination character;
  * @return (LIMIT + 1) if the cstring is not null-terminated
  */
-const size_t string_utils::strlen (const char* str, const size_t LEN_LIMIT)
+const uint64_t string_utils::strlen (const char* str, const uint64_t LEN_LIMIT)
 {
     if (!str)
         return 0;
 
-    size_t len(0);
+    uint64_t len(0);
     while (*str && len <= LEN_LIMIT)
     {
         len++;
@@ -118,9 +119,9 @@ void string_utils::copyWord (char* dest, const char* &src)
     *dest = '\0';
 }
 
-const size_t string_utils::getCurrentWordLength (const char* word)
+const uint64_t string_utils::getCurrentWordLength (const char* word)
 {
-    size_t wordSize = 0;
+    uint64_t wordSize = 0;
 
     while (*word && !isspace(*word) && !isnewline(*word))
     {
@@ -170,18 +171,56 @@ String string_utils::getCurrentWordInString (const char* &word)
     }
 }
 
+/**
+ * Concatenate a single character to the end of a cstring.
+ * 
+ * @param dest The original cstring
+ * 
+ * @warning `dest` MUST be null-terminated. If it is not, function invokes undefined behaviour.
+ * @warning `dest` MUST have enough space in it to fit the new characred.
+ */
+void string_utils::add_char (char* dest, const char ch)
+{
+    char* put = dest + (string_utils::strlen(dest));
+    
+    *put = ch;
+    put++;
+    *put = '\0';
+}
+
+/**
+ * Reverses a null-terminated c-string
+ * 
+ * @warning `str` MUST be null-terminated of undefined behaviour is invoked
+ * @warning If `str` is nullptr, undefined behaviour is invoked
+ */
+void string_utils::reverse_cstr (char* str)
+{
+    char* left = str;
+    char* right = (str + string_utils::strlen(str)) - 1;
+    
+    while (left < right)
+    {
+        std::swap(*left, *right);
+        
+        left++;
+        right--;
+    }
+}
+
 // ---- LIFECYCLE ----
 
 String::String() noexcept
-: size(0), arr(nullptr)
+: size(0)
+, arr(nullptr)
 {}
 
 String::String (const char* str)
 : String()
 {
-    size_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
-    if (!len || len > MAX_BUFFER_LENGTH)
-        throw std::invalid_argument("String.ctor: Cstring argument is not null-terminated or is nullptr.");
+    uint64_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
+    if (!str || len == MAX_BUFFER_LENGTH + 1)
+        throw std::invalid_argument("String.cstr_ctor: Cstring argument is not null-terminated or is nullptr.");
 
     size = len + 1;
     arr = new char[size];
@@ -338,7 +377,7 @@ std::istream& operator>> (std::istream& in, String& str)
 
 // ---- GETTERS ----
 
-const size_t String::length () const noexcept
+const uint64_t String::length () const noexcept
 {
     return string_utils::strlen(arr);
 }
@@ -378,11 +417,11 @@ void String::print (std::ostream& out) const noexcept
 
 void String::cat (const char* str)
 {
-    size_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
-    if (!len || len > MAX_BUFFER_LENGTH)
+    uint64_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
+    if (!str || len > MAX_BUFFER_LENGTH)
         throw std::invalid_argument("String.cat: Cstring argument is not null-terminated or is nullptr.");
 
-    size_t newSize = this->size + len;
+    uint64_t newSize = this->size + len;
     char* buffer = new char[newSize];
 
     strcpy(buffer, this->c_str());
@@ -395,10 +434,12 @@ void String::cat (const char* str)
     catch (...)
     {
         delete[] buffer;
+        buffer = nullptr;
         throw;
     }
 
     delete[] buffer;
+    buffer = nullptr;
 }
 
 void String::cat (const String& other)
@@ -420,6 +461,7 @@ void String::read (std::istream& in)
         in.clear();
 
         delete[] buffer;
+        buffer = nullptr;
 
         throw std::length_error("String.read: Exceeded maximum buffer length.");
     }
@@ -479,8 +521,8 @@ void String::deserialize (std::fstream& file)
 
 void String::copy (const char* str)
 {
-    size_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
-    if (!len || len > MAX_BUFFER_LENGTH)
+    uint64_t len = string_utils::strlen(str, MAX_BUFFER_LENGTH);
+    if (!str || len > MAX_BUFFER_LENGTH)
         throw std::invalid_argument("String.copy: Cstring argument is not null-terminated or is nullptr.");
 
     char* buffer = new char[len + 1];
@@ -501,6 +543,7 @@ void String::copy (const String& other)
 void String::clear () noexcept
 {
     delete[] arr;
+    arr = nullptr;
     size = 0;
 }
 
@@ -513,4 +556,35 @@ void String::move (String&& other) noexcept
 
     arr = other.arr;
     other.arr = nullptr;
+}
+
+// ---- EXTERNAL ----
+
+String string::parseToString (const uint32_t num)
+{
+    const char ZERO_CHAR = '0';
+    
+    // Get the number of digits; if num is zero log10 breaks, so in that case just make countDigits 1 manually
+    int countDigits = (num > 0) ? static_cast<int>(std::floorf(std::log10(num) + 1)) : 1;
+    char* buffer = new char[countDigits + 1];
+
+    for (int r_cut = 1, l_cut = 10; r_cut <= num || num < 10; r_cut *= 10)
+    {
+        if (num < 10)
+        {
+            string_utils::add_char(buffer, (ZERO_CHAR + num));
+            break;
+        }
+        
+        int currentDigit = (num / r_cut) % l_cut;
+        string_utils::add_char(buffer, (ZERO_CHAR + currentDigit));
+    }
+
+    string_utils::reverse_cstr(buffer);
+    
+    String output(buffer);
+    delete[] buffer;
+    buffer = nullptr;
+
+    return output;
 }

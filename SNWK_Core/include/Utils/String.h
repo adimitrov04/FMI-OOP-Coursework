@@ -5,13 +5,14 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 
 #include "Vector.h"
 
 class String
 {
 public:
-    static const size_t MAX_BUFFER_LENGTH = 100000;
+    static const uint64_t MAX_BUFFER_LENGTH = 100000;
 
 public:
     String () noexcept;
@@ -51,7 +52,7 @@ public:
 
 public:
 
-    const size_t length () const noexcept;
+    const uint64_t length () const noexcept;
     const char* c_str () const noexcept;
     Vector<String> extract_words () const;
     void print (std::ostream& out = std::cout) const noexcept;
@@ -71,7 +72,7 @@ private:
     void move (String&& other) noexcept;
 
 private:
-    size_t size;
+    uint64_t size;
     char* arr;
 
 };
@@ -79,14 +80,25 @@ private:
 namespace string_utils
 {
     const bool isnewline (const char ch);
-    const size_t strlen (const char* str, const size_t LIMIT = String::MAX_BUFFER_LENGTH);
+    const uint64_t strlen (const char* str, const uint64_t LIMIT = String::MAX_BUFFER_LENGTH);
     const int strcmp (const char* str1, const char* str2);
     const int strcasecmp (const char* str1, const char* str2);
 
     String getCurrentWordInString (const char* &word);
     const char* findNextWord (const char* currentPosition);
-    const size_t getCurrentWordLength (const char* word);
+    const uint64_t getCurrentWordLength (const char* word);
     void copyWord (char* dest, const char* &src);
+
+    void add_char (char* dest, const char ch);
+    void reverse_cstr (char* str);
 }
+
+namespace string
+{
+
+String parseToString (const uint32_t num);
+
+}
+
 
 #endif // __STRING_H__

@@ -29,7 +29,7 @@ Vector<T>::Vector(const Vector<T> &other)
 template <typename T>
 Vector<T>::~Vector() noexcept
 {
-    delete[] arr;
+    clear(); // i am losing my mind
 }
 
 // ---- OPERATORS ----
@@ -37,7 +37,7 @@ Vector<T>::~Vector() noexcept
 template <typename T>
 Vector<T>& Vector<T>::operator=(const Vector& other)
 {
-    if (this != other)
+    if (this != &other)
         copy(other);
 
     return *this;
@@ -131,6 +131,12 @@ T* Vector<T>::back () const
 template <typename T>
 T* Vector<T>::binary_search (T& search_arg) const noexcept
 {
+    if (f_size == 0 || arr == nullptr)
+        return nullptr;
+
+    if (f_size == 1)
+        return (*arr == search_arg) ? arr : nullptr;
+
     uint64_t lowLim = 0;
     uint64_t upLim = (f_size - 1);
 
@@ -220,6 +226,7 @@ void Vector<T>::reserve (const uint64_t capacity)
     catch (...)
     {
         delete[] buffer;
+        buffer = nullptr;
         throw;
     }
 
@@ -259,6 +266,7 @@ template <typename T>
 void Vector<T>::clear () noexcept
 {
     delete[] arr;
+    arr = nullptr;
     f_capacity = 0;
     f_size = 0;
 }
