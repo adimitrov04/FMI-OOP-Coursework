@@ -12,6 +12,16 @@
 namespace snwk
 {
 
+enum write_mode
+{
+    // Moves the writing pointer to the end of the file before writing
+    append,
+    // Does not move the write pointer from its current position, overwriting any data the pointer is currently at (UNSAFE)
+    overwrite,
+    // Signs the data count as 0 and moves the write pointer to the end of the file header. Used to rewrtire files from the start.
+    rewrite
+};
+
 template <class ObjectType>
 class SNWKFile
 {
@@ -31,7 +41,7 @@ public:
     void close () noexcept;
 
     void read_object (ObjectType& outObj);
-    void write_object (const ObjectType& inObj);
+    void write_object (const ObjectType& inObj, write_mode mode = append);
 
     inline bool is_good () noexcept;
     snwk::state get_state () const noexcept;

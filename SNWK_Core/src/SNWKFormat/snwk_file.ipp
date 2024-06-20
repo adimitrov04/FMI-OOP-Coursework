@@ -43,6 +43,7 @@ void snwk::SNWKFile<ObjectType>::create (const char* file_path)
 template <class ObjectType>
 void snwk::SNWKFile<ObjectType>::open (const char* file_path)
 {
+    // TODO make this function check if file exists and throw appropriately
     file_stream.open(file_path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
     if (!file_stream)
         throw std::invalid_argument("SNWKFile.ctor: File could not be opened or does not exist.");
@@ -80,10 +81,16 @@ void snwk::SNWKFile<ObjectType>::read_object (ObjectType& outObj)
 }
 
 template <class ObjectType>
-void snwk::SNWKFile<ObjectType>::write_object (const ObjectType& inObj)
+void snwk::SNWKFile<ObjectType>::write_object (const ObjectType& inObj, snwk::write_mode mode)
 {
-    file_stream.seekp(0, std::ios_base::end);
-    
+    if (mode == write_mode::append)
+        file_stream.seekp(0, std::ios_base::end);
+
+    if (mode == write_mode::rewrite)
+    {
+        metadata.reset_data_count(file_stream);
+    }
+
     inObj.Serialize(file_stream);
     metadata.sign_new_record(file_stream);
 }

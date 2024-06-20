@@ -1,5 +1,8 @@
 #include "../../include/Utils/Directory.h"
 
+#include <cstdlib>
+#include <stdexcept>
+
 // Check whether windir evironment variable is defined in order to ensure
 // that proper commantds are used.
 static const String LIST_COMM = getenv("windir") ? "dir 1> NUL 2>&1 " : "ls >/dev/null 2>&1 ";

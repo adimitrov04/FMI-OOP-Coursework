@@ -3,9 +3,6 @@
 #ifndef __DIRECTORY_LIB__
 #define __DIRECTORY_LIB__
 
-#include <cstdlib>
-#include <stdexcept>
-
 #include "String.h"
 
 namespace dir

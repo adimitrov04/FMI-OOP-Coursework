@@ -61,6 +61,8 @@ public:
     void set_state (state setState) noexcept;
     uint64_t get_count () const noexcept;
     void write_state (std::fstream& file, state setState);
+    void reset_data_count (std::fstream& file);
+
 
 private:
     static const FourCC FORMAT_HANDLE;
@@ -70,13 +72,13 @@ private:
     state file_state;
 
 private:
-    void validate_format (std::fstream& file) const;
-    void validate_type (std::fstream& file) const;
-
-private:
     static constexpr int HEADER_SIZE = (sizeof(FourCC) * 2) + sizeof(uint64_t) + sizeof(char);
     static constexpr int state_pos = HEADER_SIZE - sizeof(char);
     static constexpr int count_pos = state_pos - sizeof(uint64_t);
+
+private:
+    void validate_format (std::fstream& file) const;
+    void validate_type (std::fstream& file) const;
 
 };
 

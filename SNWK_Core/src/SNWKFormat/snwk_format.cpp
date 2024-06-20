@@ -103,10 +103,10 @@ void FILE_HEADER::validate (std::fstream& file)
     file.read(&stateChar, sizeof(stateChar));
 
     if (getStateFromChar(stateChar) == state::bad)
-        throw std::runtime_error("SNWKFile.open: Specified file has been corrupted.");
+        throw std::runtime_error("SNWKFile.open: Specified file has been corrupted."); //snwk::data_corrupted
 
     if (getStateFromChar(stateChar) == state::good)
-        throw std::runtime_error("SNWKFile.open: Specified file is already in use.");
+        throw std::runtime_error("SNWKFile.open: Specified file is already in use."); //snwk::file_in_use
 
     write_state(file, state::good);
     set_state(state::good);
@@ -125,11 +125,19 @@ void FILE_HEADER::serialize (std::fstream& file) const
 
 void FILE_HEADER::sign_new_record (std::fstream& file)
 {
+    int write_pos = file.tellp();
+
     data_count++;
     file.seekp(count_pos);
     file.write(reinterpret_cast<char*>(&data_count), sizeof(data_count));
+    if (file.bad())
+    {
+        data_count--;
+        file.seekp(write_pos);
+        throw std::runtime_error("FILE_HEADER.sign_new_record: Failed to sign record");
+    }
 
-    file.seekp(0, std::ios_base::end);
+    file.seekp(write_pos);
 }
 
 void FILE_HEADER::clear () noexcept
@@ -161,6 +169,25 @@ void FILE_HEADER::write_state (std::fstream& file, state setState)
     file.write(&stateChar, sizeof(char));
     
     file.seekp(0, std::ios_base::end);
+}
+
+void FILE_HEADER::reset_data_count (std::fstream& file)
+{
+    uint64_t saveOldDataCount = data_count;
+
+    int cur_pos = file.tellp();
+
+    data_count = 0;
+    file.seekp(count_pos);
+    file.write(reinterpret_cast<char*>(&data_count), sizeof(data_count));
+    if (file.bad())
+    {
+        data_count = saveOldDataCount;
+        file.seekp(cur_pos);
+        throw std::runtime_error("FILE_HEADER.sign_new_record: Failed to sign record");
+    }
+
+    file.seekp(sizeof(getCharFromState(file_state)), std::ios_base::cur);
 }
 
 // ---- PRIVATE ----
