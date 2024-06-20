@@ -24,6 +24,11 @@ public:
     User& operator= (const User& other);
     bool operator== (const User& other) const noexcept;
 
+    bool operator< (const User& other) const noexcept;
+    bool operator<= (const User& other) const noexcept;
+    bool operator> (const User& other) const noexcept;
+    bool operator>= (const User& other) const noexcept;
+
 public:
     const String& GetName () const noexcept;
     uint32_t GetID () const noexcept;

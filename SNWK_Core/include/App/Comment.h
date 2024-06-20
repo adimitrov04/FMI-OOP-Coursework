@@ -27,6 +27,12 @@ public:
 
 public:
     Comment& operator= (const Comment& other);
+    bool operator== (const Comment& other) const noexcept;
+    
+    bool operator< (const Comment& other) const noexcept;
+    bool operator<= (const Comment& other) const noexcept;
+    bool operator> (const Comment& other) const noexcept;
+    bool operator>= (const Comment& other) const noexcept;
 
 public:
     const String& GetContent () const noexcept;

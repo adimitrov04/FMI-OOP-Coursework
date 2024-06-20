@@ -54,7 +54,27 @@ User& User::operator= (const User& other)
 
 bool User::operator== (const User& other) const noexcept
 {
-    return username == other.GetName();
+    return username == other.GetName() || user_id == other.user_id;
+}
+
+bool User::operator< (const User& other) const noexcept
+{
+    return user_id < other.user_id;
+}
+
+bool User::operator<= (const User& other) const noexcept
+{
+    return user_id <= other.user_id;
+}
+
+bool User::operator> (const User& other) const noexcept
+{
+    return user_id > other.user_id;
+}
+
+bool User::operator>= (const User& other) const noexcept
+{
+    return user_id >= other.user_id;
 }
 
 // ---- GETTERS ----

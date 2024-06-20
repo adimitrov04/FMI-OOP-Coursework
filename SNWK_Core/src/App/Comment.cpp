@@ -58,6 +58,31 @@ Comment& Comment::operator= (const Comment& other)
     return *this;
 }
 
+bool Comment::operator== (const Comment& other) const noexcept
+{
+    return comment_id == other.comment_id;
+}
+    
+bool Comment::operator< (const Comment& other) const noexcept
+{
+    return comment_id < other.comment_id;
+}
+
+bool Comment::operator<= (const Comment& other) const noexcept
+{
+    return comment_id <= other.comment_id;
+}
+
+bool Comment::operator> (const Comment& other) const noexcept
+{
+    return comment_id > other.comment_id;
+}
+
+bool Comment::operator>= (const Comment& other) const noexcept
+{
+    return comment_id >= other.comment_id;
+}
+
 // ---- GETTERS ----
 
 const String& Comment::GetContent () const noexcept
