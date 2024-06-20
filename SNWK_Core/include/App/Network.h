@@ -22,12 +22,12 @@ public:
     }
 
 public:
+    User& GetCurrentUser () const;
+    void SetCurrentUser () const;
+
     void Load (const String& dir_path);
     void SaveInCurrentPath () const;
     void ExportToNewPath (const String& export_path) const;
-
-private:
-
 
 private:
     Network() = default;
@@ -36,8 +36,10 @@ private:
     ~Network() = default;
 
 private:
-    String directory_path;
+    static User& CURRENTLY_LOGGED_IN_USER;
     
+    String directory_path;
+
     Vector<User> users;
     Vector<Thread> threads;
 

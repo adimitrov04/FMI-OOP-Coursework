@@ -3,9 +3,11 @@
 #ifndef __POST_H__
 #define __POST_H__
 
+#include <cstdint>
+
 #include "../Utils/Vector.h"
 
-#include "../SNWKFormat/ISerializeable.h"
+#include "Interfaces/ISerializeable.h"
 
 #include "User.h"
 #include "Comment.h"
@@ -22,10 +24,12 @@ public:
     virtual void Deserialize (std::fstream& file) override;
 
 private:
-    const User& author;
+    uint16_t post_id;
+    User& author;
+
     String title;
     String content;
-    Vector<Comment> comments;
+    Vector<Comment> post_comments;
 
 };
 

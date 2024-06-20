@@ -8,7 +8,7 @@
 #include "../project_utils.h"
 #include "../snwk_lib.h"
 
-#include "../SNWKFormat/ISerializeable.h"
+#include "Interfaces/ISerializeable.h"
 
 enum vote_values
 {

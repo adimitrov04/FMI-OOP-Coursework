@@ -9,13 +9,13 @@
 #include "../Utils/String.h"
 #include "../../include/SNWKFormat/snwk_format.h"
 
-#include "../SNWKFormat/ISerializeable.h"
+#include "Interfaces/ISerializeable.h"
 
 class User : public ISerializeable
 {
 
 public:
-    User(const String& setName, const String& setPass, const uint32_t setID);
+    User(const String& setName, const String& setPass, const uint32_t setID, const int32_t setScore);
     ~User() = default;
 
 public:
@@ -29,7 +29,7 @@ public:
 
     void SetName (const String& newName);
     void SetPass (const String& newPass);
-    void AddScore (const int32_t value) noexcept;
+    void AddScore (const int8_t value) noexcept;
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
