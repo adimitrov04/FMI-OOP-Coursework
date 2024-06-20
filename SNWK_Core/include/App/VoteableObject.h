@@ -15,8 +15,7 @@ class VoteableObject
 {
 
 public:
-    VoteableObject(const String& setVoteTablePath);
-
+    VoteableObject(String setVoteTableFileName = "null");
     virtual ~VoteableObject() = default;
 
 public:
@@ -24,9 +23,15 @@ public:
 
     void Upvote (const User& voter);
     void Downvote (const User& voter);
+    void Unvote (const User& voter);
 
     void serialize (std::fstream& file) const;
     void deserialize (std::fstream& file);
+
+protected:
+    void set_vote_table_name (const String& fileName);
+    const String& get_vote_table_name () const;
+    void set_score (const int32_t setScore);
 
 protected:
     VoteTable vote_table;

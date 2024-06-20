@@ -13,15 +13,15 @@
 enum vote_values
 {
     downvote = -1,
-    upvote = 1,
-    none = 0
+    none = 0,
+    upvote = 1
 };
 
 class VoteEntry : public ISerializeable
 {
 
 public:
-    VoteEntry(const uint32_t setID, const vote_values setVal);
+    VoteEntry(const uint32_t setID = 0, const vote_values setVal = none) noexcept;
 
 public:
     vote_values GetValue () const;
@@ -31,15 +31,20 @@ public:
     virtual void Deserialize (std::fstream& file) override;
 
 public:
-    //VoteEntry& operator= (const VoteEntry& other);
     bool operator== (const VoteEntry& other) const;
+    
+    bool operator< (const VoteEntry& other) const;
+    bool operator<= (const VoteEntry& other) const;
+
+    bool operator> (const VoteEntry& other) const;
+    bool operator>= (const VoteEntry& other) const;
 
 public:
     static const snwk::FourCC TYPE_FCC;
 
 private:
-    uint32_t user_id = 0;
-    int8_t vote = 0;
+    uint32_t user_id;
+    int8_t vote;
 
 };
 
@@ -53,8 +58,10 @@ public:
 public:
     void LoadTable (const char* path);
     void SaveTable (const char* path);
+    uint64_t GetEntryCount () const noexcept;
+    void Clear () noexcept;
 
-    VoteEntry* FindEntry (const uint32_t id) const;
+    VoteEntry* FindEntry (const uint32_t id) const noexcept;
     void AddEntry (const VoteEntry& inEntry);
     void RemoveEntry (const uint32_t entryID);
 
