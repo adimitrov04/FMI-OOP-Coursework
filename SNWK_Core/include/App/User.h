@@ -9,9 +9,10 @@
 #include "../Utils/String.h"
 #include "../../include/SNWKFormat/snwk_format.h"
 
+#include "Interfaces/AppElement.h"
 #include "Interfaces/ISerializeable.h"
 
-class User : public ISerializeable
+class User : public AppElement, public ISerializeable
 {
 
 public:
@@ -33,6 +34,8 @@ public:
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
+
+    virtual void DeleteObject () override;
 
     // For testing, remove later
     void printinfo (std::ostream& out) const;

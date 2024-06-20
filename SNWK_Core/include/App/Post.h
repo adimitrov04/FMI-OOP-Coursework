@@ -7,12 +7,13 @@
 
 #include "../Utils/Vector.h"
 
+#include "Interfaces/AppElement.h"
 #include "Interfaces/ISerializeable.h"
 
 #include "User.h"
 #include "Comment.h"
 
-class Post : public ISerializeable
+class Post : public AppElement, public ISerializeable
 {
 
 public:
@@ -22,6 +23,8 @@ public:
 public:
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
+
+    virtual void DeleteObject () override;
 
 private:
     uint16_t post_id;
