@@ -17,19 +17,19 @@ int32_t VoteableObject::GetScore () const
     return score;
 }
 
-void VoteableObject::Upvote (const User& voter)
+void VoteableObject::Upvote (const User& voter, User& author)
 {
-    Vote(vote_values::upvote, voter);
+    vote(vote_values::upvote, voter, author);
 }
 
-void VoteableObject::Downvote (const User& voter)
+void VoteableObject::Downvote (const User& voter, User& author)
 {
-    Vote(vote_values::downvote, voter);
+    vote(vote_values::downvote, voter, author);
 }
 
-void VoteableObject::Unvote (const User& voter)
+void VoteableObject::Unvote (const User& voter, User& author)
 {
-    Vote(vote_values::none, voter);
+    vote(vote_values::none, voter, author);
 }
 
 void VoteableObject::serialize (std::fstream& file) const
@@ -70,7 +70,7 @@ void VoteableObject::set_score (const int32_t setScore)
 
 // ---- PRIVATE ----
 
-void VoteableObject::Vote (vote_values val, const User& voter)
+void VoteableObject::vote (vote_values val, const User& voter, User& author)
 {
     vote_table.LoadTable(vote_table_path.c_str());
     VoteEntry* currentUserEntry = nullptr;
@@ -99,6 +99,7 @@ void VoteableObject::Vote (vote_values val, const User& voter)
         vote_table.Clear();
 
         score += val;
+        author.AddScore(val);
         return;
     }
 
@@ -120,6 +121,7 @@ void VoteableObject::Vote (vote_values val, const User& voter)
         vote_table.Clear();
 
         score -= oldValue;
+        author.AddScore(-oldValue);
         return;
     }
 
@@ -145,4 +147,5 @@ void VoteableObject::Vote (vote_values val, const User& voter)
     vote_table.Clear();
     
     score = (score - oldValue) + val;
+    author.AddScore(val - oldValue);
 }

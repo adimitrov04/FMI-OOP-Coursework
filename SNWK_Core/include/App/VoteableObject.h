@@ -32,9 +32,9 @@ public:
 public:
     int32_t GetScore () const;
 
-    void Upvote (const User& voter);
-    void Downvote (const User& voter);
-    void Unvote (const User& voter);
+    void Upvote (const User& voter, User& author);
+    void Downvote (const User& voter, User& author);
+    void Unvote (const User& voter, User& author);
 
     void serialize (std::fstream& file) const;
     void deserialize (std::fstream& file);
@@ -48,7 +48,7 @@ protected:
     VoteTable vote_table;
 
 private:
-    void Vote (vote_values value, const User& voter);
+    void vote (vote_values value, const User& voter, User& author);
 
 private:
     String vote_table_path;
