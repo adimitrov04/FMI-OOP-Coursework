@@ -34,16 +34,17 @@ public:
     uint32_t GetID () const noexcept;
     const String& GetPass () const noexcept;
     int32_t GetScore () const noexcept;
-    User GetDeletedVersion () const;
 
     void SetName (const String& newName);
     void SetPass (const String& newPass);
     void AddScore (const int8_t value) noexcept;
+    void MakeAdmin (User& other) noexcept;
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
 
     using AppElement::DeleteObject;
+    User GetDeletedVersion () const;
 
     // For testing, remove later
     void printinfo (std::ostream& out) const;

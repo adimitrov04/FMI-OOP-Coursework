@@ -39,6 +39,7 @@ public:
     uint32_t GetAuthorID () const noexcept;
     const String& GetTitle () const noexcept;
     const String& GetContent () const noexcept;
+    Comment* GetCommentByID (uint32_t id) const;
 
     void SetTitle (const String& text);
     void SetContent (const String& text);
@@ -47,13 +48,11 @@ public:
     virtual void Deserialize (std::fstream& file) override;
 
     using AppElement::DeleteObject;
+    static Vector<Post> getEmptyVector();
 
 public:
     static const snwk::FourCC TYPE_FCC;
     static const Post DELETED_POST;
-
-private:
-    static Vector<Comment> getEmptyVector();
 
 private:
     uint32_t parent_thread_id;

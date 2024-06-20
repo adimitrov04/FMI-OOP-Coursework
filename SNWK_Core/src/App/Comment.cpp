@@ -7,8 +7,16 @@
 
 const snwk::FourCC Comment::TYPE_FCC = {'c', 'm', 'n', 't'};
 
+const Comment Comment::DELETED_COMMENT(0, 0, 0, 0 , "[deleted]", 0);
+
 //const String Comment::VOTE_TABLE_DIR = Network::home_directory_path + "comments/"; CHANGE WHEN NETWORK IS IMPLEMENTED
 const String Comment::VOTE_TABLE_DIR = "comments/";
+
+Vector<Comment> Comment::getEmptyVector()
+{
+    Vector<Comment> empty;
+    return empty;
+}
 
 // ---- LIFECYCLE ----
 
@@ -50,6 +58,7 @@ Comment& Comment::operator= (const Comment& other)
         replying_to_id = other.replying_to_id;
      
         set_vote_table_name(other.get_vote_table_name());
+        set_score(other.GetScore());
 
         if (other.IsDeleted())
             DeleteObject();
@@ -117,9 +126,29 @@ uint32_t Comment::GetReplyID () const noexcept
 
 // ---- SETTERS ----
 
+void Comment::SetParentThreadID (const uint32_t id)
+{
+    parent_thread_id = id;
+}
+
+void Comment::SetParentPostID (const uint32_t id)
+{
+    parent_post_id = id;
+}
+
 void Comment::SetID (const uint32_t id)
 {
     comment_id = id;
+}
+
+void Comment::SetReplyID (const uint32_t id)
+{
+    replying_to_id = id;
+}
+
+void Comment::SetAuthorID (const uint32_t id)
+{
+    author_id = id;
 }
 
 void Comment::SetContent (const String& text)
@@ -151,6 +180,14 @@ void Comment::Unvote (const User& voter, User& author)
         throw std::invalid_argument("Comment.vote: Cannot vote on a deleted comment.");
 
     VoteableObject::Unvote(voter, author);
+}
+
+Comment Comment::GetDeletedVersion () const
+{
+    Comment deletedVer(DELETED_COMMENT);
+    deletedVer.SetID(comment_id);
+
+    return deletedVer;
 }
 
 // ---- SERIALIZATION ----
@@ -208,7 +245,7 @@ void Comment::Deserialize (std::fstream& file)
     content.deserialize(file);
     check_file_state(file);
 
-    VoteableObject::serialize(file);
+    VoteableObject::deserialize(file);
 }
 
 // ---- PRIVATE ----

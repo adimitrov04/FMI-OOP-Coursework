@@ -9,8 +9,8 @@
 #include "App/User.h"
 
 #include "App/Comment.h"
-//#include "SNWK_Core/include/App/Post.h"
-//#include "SNWK_Core/include/App/Thread.h"
+#include "App/Post.h"
+#include "App/Thread.h"
 
 //#include "SNWK_Core/include/App/Network.h"
 

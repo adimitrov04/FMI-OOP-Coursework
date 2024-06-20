@@ -41,8 +41,13 @@ public:
     uint32_t GetParentThreadID () const noexcept;
     uint32_t GetParentPostID () const noexcept;
     uint32_t GetReplyID () const noexcept;
+    Comment GetDeletedVersion () const;
     
+    void SetParentThreadID (const uint32_t id);
+    void SetParentPostID (const uint32_t id);
     void SetID (const uint32_t id);
+    void SetReplyID (const uint32_t id);
+    void SetAuthorID (const uint32_t id);
     void SetContent (const String& text);
 
     virtual void Upvote (const User& voter, User& author) override;
@@ -53,9 +58,11 @@ public:
     virtual void Deserialize (std::fstream& file) override;
 
     using AppElement::DeleteObject;
+    static Vector<Comment> getEmptyVector();
 
 public:
     static const snwk::FourCC TYPE_FCC;
+    static const Comment DELETED_COMMENT;
     static const String VOTE_TABLE_DIR;
 
 private:

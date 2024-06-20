@@ -4,12 +4,11 @@
 
 const snwk::FourCC Post::TYPE_FCC = {'p', 'o', 's', 't'};
 
-const Post Post::DELETED_POST(0, 0, 0, "[deleted]", "/null", Post::getEmptyVector());
+const Post Post::DELETED_POST(0, 0, 0, "[deleted]", "/null", Comment::getEmptyVector());
 
-Vector<Comment> Post::getEmptyVector()
+Vector<Post> Post::getEmptyVector()
 {
-    Vector<Comment> empty;
-
+    Vector<Post> empty;
     return empty;
 }
 
@@ -48,6 +47,9 @@ Post& Post::operator= (const Post& other)
         title = other.title;
         content = other.content;
         post_comments = other.post_comments;
+
+        if (other.IsDeleted())
+            DeleteObject();
     }
 
     return *this;

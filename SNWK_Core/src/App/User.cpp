@@ -140,6 +140,11 @@ void User::AddScore (const int8_t value) noexcept
     user_score += value;
 }
 
+void User::MakeAdmin (User& other) noexcept
+{
+    other.is_admin = true;
+}
+
 // ---- SERIALIZATION ----
 
 void User::Serialize (std::fstream& file) const
