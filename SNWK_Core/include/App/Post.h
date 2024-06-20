@@ -25,7 +25,13 @@ public:
     ~Post() = default;
 
 public:
+    Post& operator= (const Post& other);
+    bool operator== (const Post& other);
     
+    bool operator> (const Post& other);
+    bool operator<= (const Post& other);
+    bool operator< (const Post& other);
+    bool operator>= (const Post& other);
 
 public:
     uint32_t GetParentThreadID () const noexcept;
