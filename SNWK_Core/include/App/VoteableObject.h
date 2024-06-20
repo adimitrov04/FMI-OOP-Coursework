@@ -26,7 +26,7 @@ class VoteableObject
 {
 
 public:
-    VoteableObject(String setVoteTableFileName = "null");
+    VoteableObject(String setVoteTableFileName = "");
     virtual ~VoteableObject() = default;
 
 public:
