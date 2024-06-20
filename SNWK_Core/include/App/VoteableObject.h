@@ -11,6 +11,17 @@
 #include "VoteTable.h"
 #include "User.h"
 
+/**
+ * Abstract class for objects which support a scoring system. Each class implementing
+ * this abstraction will have a `score` member and an associated `VoteTable` with a
+ * specified path.
+ * 
+ * @attention Every class implementing this abstraction is required to implement
+ * a copy assignment operator which manually assigns the `vote_table_path` and `score`
+ * values from the copied object
+ * @attention If implementation class also implements the `ISerializable` interface,
+ * the `VoteableObject` serialization MUST also be called during object serialization
+ */
 class VoteableObject
 {
 
