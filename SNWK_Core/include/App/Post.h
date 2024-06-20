@@ -5,7 +5,8 @@
 
 #include <cstdint>
 
-#include "../Utils/Vector.h"
+#include "../project_utils.h"
+#include "../SNWKFormat/snwk_format.h"
 
 #include "Interfaces/AppElement.h"
 #include "Interfaces/ISerializeable.h"
@@ -13,22 +14,45 @@
 #include "User.h"
 #include "Comment.h"
 
-class Post : public AppElement, public ISerializeable
+class Post : public AppElement
 {
 
 public:
     Post();
-    ~Post();
+    Post(uint32_t setThreadID, uint32_t setPostID, uint32_t setAuthorID,
+         const String& setTitle, const String& setContent, Vector<Comment>&& loadComments);
+
+    ~Post() = default;
 
 public:
+    
+
+public:
+    uint32_t GetParentThreadID () const noexcept;
+    uint32_t GetPostID () const noexcept;
+    uint32_t GetAuthorID () const noexcept;
+    const String& GetTitle () const noexcept;
+    const String& GetContent () const noexcept;
+
+    void SetTitle (const String& text);
+    void SetContent (const String& text);
+
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
 
-    virtual void DeleteObject () override;
+    using AppElement::DeleteObject;
+
+public:
+    static const snwk::FourCC TYPE_FCC;
+    static const Post DELETED_POST;
 
 private:
-    uint16_t post_id;
-    User& author;
+    static Vector<Comment> getEmptyVector();
+
+private:
+    uint32_t parent_thread_id;
+    uint32_t post_id;
+    uint32_t author_id;
 
     String title;
     String content;
