@@ -28,7 +28,7 @@ Thread::Thread(uint32_t setID, uint32_t setAuthorID, const String& setTitle, Vec
     SetAuthorID(setAuthorID);
     
     SetTitle(setTitle);
-    post_list = loadPosts;
+    post_list = std::move(loadPosts);
 }
 
 // ---- OPERATORS ----
@@ -123,6 +123,21 @@ void Thread::SetAuthorID (uint32_t setAuthorID)
 void Thread::SetTitle (const String& setTitle)
 {
     title = setTitle;
+}
+
+void Thread::AddPost (const Post& post, snwk::SNWKFile<Post> &postDataFile)
+{
+    post_list.push_back(post);
+
+    try
+    {
+        postDataFile.write_object(post);
+    }
+    catch (...)
+    {
+        post_list.pop_back();
+        throw;
+    }
 }
 
 // ---- SERIALIZATION ----

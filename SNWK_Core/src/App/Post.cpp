@@ -31,7 +31,7 @@ Vector<Comment>&& loadComments)
     SetTitle(setTitle);
     SetContent(setContent);
 
-    post_comments = loadComments;
+    post_comments = std::move(loadComments);
 }
 
 // ---- OPERATORS ----
@@ -117,6 +117,21 @@ void Post::SetTitle (const String& text)
 void Post::SetContent (const String& text)
 {
     content = text;
+}
+
+void Post::AddComment (const Comment& comment, snwk::SNWKFile<Comment> &commentDataFile)
+{
+    post_comments.push_back(comment);
+
+    try
+    {
+        commentDataFile.write_object(comment);
+    }
+    catch (...)
+    {
+        post_comments.pop_back();
+        throw;
+    }
 }
 
 // ---- SERIALIZATION ----

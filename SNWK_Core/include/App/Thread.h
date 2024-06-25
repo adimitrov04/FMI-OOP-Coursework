@@ -5,8 +5,9 @@
 
 #include <cstdint>
 
+#include "../snwk_lib.h"
+
 #include "../Utils/Vector.h"
-#include "../SNWKFormat/snwk_format.h"
 
 #include "Interfaces/AppElement.h"
 #include "Interfaces/ISerializeable.h"
@@ -44,6 +45,8 @@ public:
     void SetID (uint32_t setID);
     void SetAuthorID (uint32_t setAuthorID);
     void SetTitle (const String& setTitle);
+
+    void AddPost (const Post& post, snwk::SNWKFile<Post> &postDataFile);
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;

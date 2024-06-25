@@ -6,7 +6,7 @@
 #include <cstdint>
 
 #include "../project_utils.h"
-#include "../SNWKFormat/snwk_format.h"
+#include "../snwk_lib.h"
 
 #include "Interfaces/AppElement.h"
 #include "Interfaces/ISerializeable.h"
@@ -43,6 +43,8 @@ public:
 
     void SetTitle (const String& text);
     void SetContent (const String& text);
+
+    void AddComment (const Comment& comment, snwk::SNWKFile<Comment> &commentDataFile);
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
