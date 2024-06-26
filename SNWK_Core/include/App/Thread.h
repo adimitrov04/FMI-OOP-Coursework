@@ -21,6 +21,8 @@ class Thread : public AppElement
 
 public:
     Thread();
+    Thread(const uint32_t id);
+    Thread(const String& title);
     Thread(uint32_t setID, uint32_t setAuthorID, const String& setTitle, Vector<Post>&& loadPosts);
 
     ~Thread() = default;
@@ -42,7 +44,6 @@ public:
     Post* GetPostByID (const uint32_t id) const;
     Thread GetDeletedVersion () const;
 
-    void SetID (uint32_t setID);
     void SetAuthorID (uint32_t setAuthorID);
     void SetTitle (const String& setTitle);
 
@@ -53,6 +54,10 @@ public:
 
     using AppElement::DeleteObject;
     static Vector<Thread> getEmptyVector();
+
+private:
+    Thread (const Thread& other);
+    void SetID (uint32_t setID);
 
 public:
     static const snwk::FourCC TYPE_FCC;

@@ -7,6 +7,7 @@
 #include <cstdint>
 
 #include "../Utils/String.h"
+#include "../Utils/Vector.h"
 #include "../SNWKFormat/snwk_format.h"
 
 #include "Interfaces/AppElement.h"
@@ -17,6 +18,8 @@ class User : public AppElement
 
 public:
     User();
+    User (const uint32_t searchID);
+    User (const String& searchName);
     User(const String& setName, const String& setPass, const uint32_t setID, const int32_t setScore);
     ~User() = default;
 
@@ -51,7 +54,6 @@ public:
 
 public:
     static const snwk::FourCC TYPE_FCC;
-    static const User NULL_USER;
     static const User DELETED_USER;
 
 private:

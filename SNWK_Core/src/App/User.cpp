@@ -7,12 +7,14 @@
 
 const snwk::FourCC User::TYPE_FCC = {'u', 's', 'e', 'r'};
 
-const User User::NULL_USER("/null", "0", 0, 0);
-
 const User User::DELETED_USER("[deleted]", "0", 0, 0);
 
 // ---- LIFECYCLE ----
 
+/**
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a user base. To be used ONLY by Vector when reserving space or by internal User mehtods.
+ */
 User::User ()
 : user_id(0)
 , username()
@@ -20,6 +22,32 @@ User::User ()
 , user_score(0)
 , is_admin(false)
 {}
+
+/**
+ * Search constructor for searching by ID.
+ * 
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a user base. To be used ONLY by internal User mehtods or for temporary objects when
+ * searching for a user within a Vector.
+ */
+User::User (const uint32_t search_id)
+: User()
+{
+    SetID(search_id);
+}
+
+/**
+ * Search constructor for searching by name.
+ * 
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a user base. To be used ONLY by internal User mehtods or for temporary objects when
+ * searching for a User within a Vector.
+ */
+User::User (const String& search_name)
+: User()
+{
+    SetName(search_name);
+}
 
 User::User(const String& setName, const String& setPass, const uint32_t setID, const int32_t setScore)
 : User()
@@ -54,7 +82,7 @@ User& User::operator= (const User& other)
 
 bool User::operator== (const User& other) const noexcept
 {
-    return username == other.GetName() || user_id == other.user_id;
+    return  user_id == other.user_id || username == other.GetName();
 }
 
 bool User::operator< (const User& other) const noexcept
@@ -111,15 +139,15 @@ User User::GetDeletedVersion () const
 
 void User::SetName (const String& newName)
 {
-    if (newName.length() == 0)
-        throw std::invalid_argument("User.SetName: Name cannot be empty.");
+    if (!newName && newName != "[deleted]")
+        throw std::invalid_argument("User.SetName: Name cannot be empty or is invalid.");
 
     username = newName;
 }
 
 void User::SetPass (const String& newPass)
 {
-    if (newPass.length() == 0)
+    if (!newPass)
         throw std::invalid_argument("User.SetPass: Password cannot be empty.");
 
     password = newPass;

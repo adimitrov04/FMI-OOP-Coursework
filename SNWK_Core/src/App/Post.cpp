@@ -4,7 +4,7 @@
 
 const snwk::FourCC Post::TYPE_FCC = {'p', 'o', 's', 't'};
 
-const Post Post::DELETED_POST(0, 0, 0, "[deleted]", "/null", Comment::getEmptyVector());
+const Post Post::DELETED_POST(0, 0, 0, "[deleted]", "", Comment::getEmptyVector());
 
 Vector<Post> Post::getEmptyVector()
 {
@@ -14,6 +14,10 @@ Vector<Post> Post::getEmptyVector()
 
 // ---- LIFECYCLE ----
 
+/**
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a post base. To be used ONLY by Vector when reserving space or by internal Post mehtods.
+ */
 Post::Post()
 : parent_thread_id(0)
 , post_id(0)

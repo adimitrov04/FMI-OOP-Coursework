@@ -16,10 +16,39 @@ Vector<Thread> Thread::getEmptyVector ()
 
 // ---- LIFECYCLE ----
 
+/**
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a thread base. To be used ONLY by Vector when reserving space or by internal Thread mehtods.
+ */
 Thread::Thread()
 : thread_id(0)
 , author_id(0)
 {}
+
+/**
+ * Search constructor for searching by ID.
+ * 
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a thread base. To be used ONLY by internal Thread mehtods or for temporary objects when
+ * searching for a Thread within a Vector.
+ */
+Thread::Thread(const uint32_t id)
+: Thread()
+{
+    SetID(id);
+}
+
+/**
+ * Search constructor for searching by title.
+ * 
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a thread base. To be used ONLY by internal Thread mehtods or for temporary objects when
+ * searching for a Thread within a Vector.
+ */
+Thread::Thread(const String& title)
+{
+    SetTitle(title);
+}
 
 Thread::Thread(uint32_t setID, uint32_t setAuthorID, const String& setTitle, Vector<Post>&& loadPosts)
 : Thread()

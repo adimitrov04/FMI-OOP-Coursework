@@ -20,6 +20,10 @@ Vector<Comment> Comment::getEmptyVector()
 
 // ---- LIFECYCLE ----
 
+/**
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a comment base. To be used ONLY by Vector when reserving space or by internal Comment mehtods.
+ */
 Comment::Comment()
 : parent_thread_id(0)
 , parent_post_id(0)
