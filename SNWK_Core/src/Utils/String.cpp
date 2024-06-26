@@ -14,7 +14,7 @@
 
 using namespace string_utils;
 
-const bool string_utils::isnewline (const char ch)
+const bool string_utils::isnewline (const char ch) noexcept
 {
     if (ch == '\r' || ch == '\n')
         return true;
@@ -50,8 +50,7 @@ const uint64_t string_utils::strlen (const char* str, const uint64_t LEN_LIMIT)
  * 
  * @throws std::invalid_argument if either str1 or str2 is not a valid, null-terminated cstring
  * 
- * @return The numerical difference between the first different character
- * encountered in str2 relative to str1
+ * @return The numerical difference between the first different character encountered in str2 relative to str1
  */
 const int string_utils::strcmp (const char* str1, const char* str2)
 {
@@ -59,7 +58,7 @@ const int string_utils::strcmp (const char* str1, const char* str2)
         throw std::invalid_argument("strcmp: Cannot compare nullptrs.");
 
     if (strlen(str1) == String::MAX_BUFFER_LENGTH || strlen(str2) == String::MAX_BUFFER_LENGTH)
-        throw std::invalid_argument("strcmp: Argument cstrings are not null-terminated.");
+        throw std::invalid_argument("strcmp: Argument cstring(s) not null-terminated.");
 
     int diff(0);
     while (*str1 && *str2)
@@ -83,7 +82,7 @@ const int string_utils::strcasecmp (const char* str1, const char* str2)
         throw std::invalid_argument("strcasecmp: Cannot compare nullptrs.");
 
     if (strlen(str1) == String::MAX_BUFFER_LENGTH || strlen(str2) == String::MAX_BUFFER_LENGTH)
-        throw std::invalid_argument("strcasecmp: Argument cstrings are not null-terminated.");
+        throw std::invalid_argument("strcasecmp: Argument cstring(s) not null-terminated.");
 
     const int CASE_DIFF = 'a' - 'A';
 
@@ -105,6 +104,34 @@ const int string_utils::strcasecmp (const char* str1, const char* str2)
 
     return diff;
 }
+
+/**
+ * Finds the location of an instance of a substring in a bigger string.
+ * 
+ * @throws `std::invalid_argument` if either `bigStr` or `smallStr` is not a valid, null-terminated cstring
+ * 
+ * @return A pointer within `bigStr`, locating the start of the encountered instance of `smallStr`
+ * @return `nullptr` if `smallStr` is not in `bigStr`
+ */
+const char* string_utils::strstr (const char* bigStr, const char* smallStr)
+{
+    if (bigStr == nullptr || smallStr == nullptr)
+        throw std::invalid_argument("strstr: Argument cannot be nullptr.");
+
+    if (string_utils::strlen(bigStr) == String::MAX_BUFFER_LENGTH || string_utils::strlen(smallStr) == String::MAX_BUFFER_LENGTH)
+        throw std::invalid_argument("strcasecmp: Argument cstring(s) not null-terminated.");
+    
+    while (*bigStr)
+    {
+        if (string_utils::strcmp(bigStr, smallStr) == 0)
+            return bigStr;
+
+        bigStr++;
+    }
+
+    return nullptr;
+}
+
 
 void string_utils::copyWord (char* dest, const char* &src)
 {
@@ -151,7 +178,7 @@ const char* string_utils::findNextWord (const char* currentPos)
 String string_utils::getCurrentWordInString (const char* &word)
 {
     if (getCurrentWordLength(word) == 0)
-        throw std::out_of_range("String.getCurrentWordInString: no words left to extract");
+        throw std::out_of_range("String.getCurrentWordInString: No words left to extract");
 
     char* buffer = new char[getCurrentWordLength(word) + 1];
 
@@ -403,6 +430,14 @@ const uint64_t String::length () const noexcept
 const char* String::c_str () const noexcept
 {
     return arr;
+}
+
+char String::last () const
+{
+    if (arr == nullptr || size == 0)
+        throw std::invalid_argument("String.last: Current String is empty.");
+    
+    return arr[size - 1];
 }
 
 Vector<String> String::extract_words () const

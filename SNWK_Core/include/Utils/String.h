@@ -50,13 +50,16 @@ public:
 
     operator bool() const noexcept;
 
-    friend std::ostream& operator<< (std::ostream& out, const String& str) noexcept;
+    friend std::ostream& operator<< (std::ostream& out, const String& str);
     friend std::istream& operator>> (std::istream& in, String& str);
 
 public:
 
     const uint64_t length () const noexcept;
     const char* c_str () const noexcept;
+
+    char last () const noexcept;
+
     Vector<String> extract_words () const;
     void print (std::ostream& out = std::cout) const noexcept;
 
@@ -85,10 +88,11 @@ private:
 
 namespace string_utils
 {
-    const bool isnewline (const char ch);
+    const bool isnewline (const char ch) noexcept;
     const uint64_t strlen (const char* str, const uint64_t LIMIT = String::MAX_BUFFER_LENGTH);
     const int strcmp (const char* str1, const char* str2);
     const int strcasecmp (const char* str1, const char* str2);
+    const char* strstr (const char* bigStr, const char* smallStr);
 
     String getCurrentWordInString (const char* &word);
     const char* findNextWord (const char* currentPosition);
