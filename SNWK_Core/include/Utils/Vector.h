@@ -36,7 +36,11 @@ public:
     const T& at (const uint64_t index) const;
     T* front () const;
     T* back () const;
-    T* binary_search (T& search_arg) const noexcept;
+    
+    T* basic_search (const T& search_arg) const noexcept;
+    T* binary_search (const T& search_arg) const;
+    T* auto_search (const T& search_arg) const;
+    uint64_t count_repetitions (const T& search_arg) const;
     bool is_sorted () const noexcept;
     
     void push_back (const T& element);
@@ -58,8 +62,8 @@ private:
 private:
     static const uint64_t DEFAULT_STARTING_CAPACITY = 4;
     
-    uint64_t f_capacity;
-    uint64_t f_size;
+    uint64_t fcapacity;
+    uint64_t fsize;
 
     T* arr;
 

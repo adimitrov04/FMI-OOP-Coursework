@@ -321,6 +321,16 @@ bool String::operator== (const String& other) const
     return *this == other.c_str();
 }
 
+bool String::operator!= (const char* str) const
+{
+    return !(*this == str);
+}
+
+bool String::operator!= (const String& other) const
+{
+    return *this != other.c_str();
+}
+
 bool String::operator> (const char* other) const
 {
     return (string_utils::strcasecmp(this->c_str(), other) > 0);
@@ -359,6 +369,14 @@ bool String::operator>= (const String& other) const
 bool String::operator<= (const String& other) const
 {
     return (*this < other) || (*this == other);
+}
+
+String::operator bool() const noexcept
+{
+    if (arr == nullptr || length() == 0)
+        return false;
+
+    return true;
 }
 
 std::ostream& operator<< (std::ostream& out, const String& str) noexcept

@@ -11,8 +11,6 @@
 
 class String
 {
-public:
-    static const uint64_t MAX_BUFFER_LENGTH = 100000;
 
 public:
     String () noexcept;
@@ -35,6 +33,9 @@ public:
     bool operator== (const char* str) const;
     bool operator== (const String& other) const;
 
+    bool operator!= (const char* str) const;
+    bool operator!= (const String& other) const;
+
     bool operator> (const char* other) const;
     bool operator> (const String& other) const;
     
@@ -46,6 +47,8 @@ public:
     
     bool operator<= (const char* other) const;
     bool operator<= (const String& other) const;
+
+    operator bool() const noexcept;
 
     friend std::ostream& operator<< (std::ostream& out, const String& str) noexcept;
     friend std::istream& operator>> (std::istream& in, String& str);
@@ -67,6 +70,9 @@ public:
     void read (std::istream& in = std::cin);
     void serialize (std::fstream& file) const;
     void deserialize (std::fstream& file);
+
+public:
+    static const uint64_t MAX_BUFFER_LENGTH = 100000;
 
 private:
     void move (String&& other) noexcept;

@@ -2,7 +2,7 @@
 
 template <typename T>
 Vector<T>::Vector() noexcept
-: f_capacity(0), f_size(0), arr(nullptr)
+: fcapacity(0), fsize(0), arr(nullptr)
 {}
 
 template <typename T>
@@ -71,13 +71,13 @@ const T& Vector<T>::operator[] (const uint64_t index) const
 template <typename T>
 const uint64_t Vector<T>::size () const noexcept
 {
-    return f_size;
+    return fsize;
 }
 
 template <typename T>
 const uint64_t Vector<T>::capacity () const noexcept
 {
-    return f_capacity;
+    return fcapacity;
 }
 
 template <typename T>
@@ -119,26 +119,57 @@ T* Vector<T>::back () const
     if (!arr)
         throw std::domain_error("Vector.back: Cannot get element since vector is empty.");
 
-    return arr + (f_size - 1);
+    return arr + (fsize - 1);
+}
+
+template <typename T>
+T* Vector<T>::basic_search (const T& search_arg) const noexcept
+{
+    for (uint64_t i = 0; i < fsize; i++)
+    {
+        if (arr[i] == search_arg)
+            return (arr + i);
+    }
+
+    return nullptr;
+}
+
+/**
+ * Search method, which optimizes searching by using different methods in different situations
+ * 
+ * @warning May invoke undefined behaviour if the template type's comparison operators
+ * compare on multiple criteria at the same time. Use with caution.
+ */
+template <typename T>
+T* Vector<T>::auto_search (const T& search_arg) const
+{
+    if (is_sorted())
+        return binary_search(search_arg);
+
+    return basic_search(search_arg);
 }
 
 /**
  * @param search_arg The element to look for, passed by value
  * 
+ * @warning Function works properly ONLY when the vector is sorted. Undefined behaviour if not sorted.
+ * @warning May invoke undefined behaviour if the template type's comparison operators
+ * compare on multiple criteria at the same time. Use with caution.
+ * 
  * @return a pointer to an element inside the vertor
  * @return nullptr if no such element exists
  */
 template <typename T>
-T* Vector<T>::binary_search (T& search_arg) const noexcept
+T* Vector<T>::binary_search (const T& search_arg) const
 {
-    if (f_size == 0 || arr == nullptr)
+    if ( arr == nullptr || fsize == 0)
         return nullptr;
 
-    if (f_size == 1)
+    if (fsize == 1)
         return (*arr == search_arg) ? arr : nullptr;
 
     uint64_t lowLim = 0;
-    uint64_t upLim = (f_size - 1);
+    uint64_t upLim = (fsize - 1);
 
     while (lowLim <= upLim)
     {
@@ -157,9 +188,26 @@ T* Vector<T>::binary_search (T& search_arg) const noexcept
 }
 
 template <typename T>
+uint64_t Vector<T>::count_repetitions (const T& element) const
+{
+    uint64_t count(0);
+
+    for (uint64_t i = 0; i < fsize; i++)
+    {
+        if (arr[i] == element)
+            count++;
+    }
+
+    return count;
+}
+
+template <typename T>
 bool Vector<T>::is_sorted () const noexcept
 {
-    return sort::is_sorted(arr, f_size);
+    if (arr == nullptr || fsize <= 1)
+        return true;
+
+    return sort::is_sorted(arr, fsize);
 }
 
 template <typename T>
@@ -169,10 +217,10 @@ void Vector<T>::push_back (const T& element)
         reserve(DEFAULT_STARTING_CAPACITY);
 
     if (size() == capacity())
-        reserve(f_capacity * 2);
+        reserve(fcapacity * 2);
     
-    arr[f_size] = element;
-    f_size++;
+    arr[fsize] = element;
+    fsize++;
 }
 
 template <typename T>
@@ -182,11 +230,11 @@ void Vector<T>::push_sorted (const T& element)
         throw std::logic_error("Vector.push_sorted: Current array needs to be sorted to perform this action.");
 
     push_back(element);
-    for (uint64_t i = f_size - 1; i > 0; i--)
+    for (uint64_t i = fsize - 1; i > 0; i--)
     {
         if (arr[i - 1] <= element)
         {
-            for (uint64_t j = (f_size - 1); j > i; j--)
+            for (uint64_t j = (fsize - 1); j > i; j--)
                 arr[j] = arr[j - 1];
 
             arr[i] = element;
@@ -198,16 +246,16 @@ void Vector<T>::push_sorted (const T& element)
 template <typename T>
 void Vector<T>::pop_back ()
 {
-    f_size--;
+    fsize--;
 }
 
 template <typename T>
 void Vector<T>::pop (const uint64_t index)
 {
-    for (uint64_t i = index; i < (f_size - 1); i++)
+    for (uint64_t i = index; i < (fsize - 1); i++)
         arr[i] = arr[i + 1];
 
-    f_size--;
+    fsize--;
 }
 
 template <typename T>
@@ -232,7 +280,7 @@ void Vector<T>::reserve (const uint64_t capacity)
 
     delete[] arr;
     arr = buffer;
-    f_capacity = capacity;
+    fcapacity = capacity;
 }
 
 template <typename T>
@@ -259,7 +307,7 @@ template <typename T>
 template <typename SortAlgorithm>
 void Vector<T>::sort (const SortAlgorithm& sorter)
 {
-    sorter(arr, f_size);
+    sorter(arr, fsize);
 }
 
 template <typename T>
@@ -267,8 +315,8 @@ void Vector<T>::clear () noexcept
 {
     delete[] arr;
     arr = nullptr;
-    f_capacity = 0;
-    f_size = 0;
+    fcapacity = 0;
+    fsize = 0;
 }
 
 // ---- PRIVATE METHODS ----
@@ -279,15 +327,15 @@ void Vector<T>::copy (const Vector<T> &other)
     Vector<T> buffer;
     buffer.reserve(other.capacity());
     
-    for (uint64_t i = 0; i < other.f_size; i++)
+    for (uint64_t i = 0; i < other.fsize; i++)
         buffer.push_back(other[i]);
 
     this->clear();
     this->arr = buffer.arr;
     buffer.arr = nullptr;
 
-    f_capacity = buffer.capacity();
-    f_size = buffer.size();
+    fcapacity = buffer.capacity();
+    fsize = buffer.size();
 }
 
 template <typename T>
@@ -296,9 +344,9 @@ void Vector<T>::move (Vector<T> &&other) noexcept
     this->arr = other.arr;
     other.arr = nullptr;
 
-    f_capacity = other.f_capacity;
-    other.f_capacity = 0;
+    fcapacity = other.fcapacity;
+    other.fcapacity = 0;
 
-    f_size = other.f_size;
-    other.f_size = 0;
+    fsize = other.fsize;
+    other.fsize = 0;
 }
