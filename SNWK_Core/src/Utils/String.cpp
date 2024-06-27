@@ -307,35 +307,17 @@ String& String::operator= (const char* str)
     return *this;
 }
 
-String& String::operator+ (const String& other)
-{
-    this->cat(other);
-
-    return *this;
-}
-
-String String::operator+ (const String& str) const
-{
-    String result(*this);
-    result.cat(str);
-
-    return result;
-}
-
-
-String& String::operator+ (const char* str)
-{
-    this->cat(str);
-
-    return *this;
-}
-
 String String::operator+ (const char* str) const
 {
     String result(*this);
     result.cat(str);
 
     return result;
+}
+
+String String::operator+ (const String& str) const
+{
+    return *this + str.c_str();
 }
 
 bool String::operator== (const char* str) const

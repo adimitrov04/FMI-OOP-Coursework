@@ -25,10 +25,8 @@ public:
     String& operator= (String&& other) noexcept;
     String& operator= (const char* other);
 
-    String& operator+ (const String& other);
-    String operator+ (const String& other) const;
-    String& operator+ (const char* str);
     String operator+ (const char* str) const;
+    String operator+ (const String& other) const;
 
     bool operator== (const char* str) const;
     bool operator== (const String& other) const;
