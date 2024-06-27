@@ -414,12 +414,20 @@ const char* String::c_str () const noexcept
     return arr;
 }
 
+char String::first () const
+{
+    if (arr == nullptr || size == 0)
+        throw std::invalid_argument("String.last: Current String is empty.");
+    
+    return arr[0];
+}
+
 char String::last () const
 {
     if (arr == nullptr || size == 0)
         throw std::invalid_argument("String.last: Current String is empty.");
     
-    return arr[size - 1];
+    return arr[size - 2];
 }
 
 Vector<String> String::extract_words () const

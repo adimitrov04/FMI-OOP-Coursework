@@ -14,8 +14,16 @@ class Network
 {
 
 public:
+    static void SetGlobalSavePath (String path);
     static Network& GetNetwork ()
     {
+        if (!GLOBAL_SAVE_PATH)
+            throw std::logic_error("Network.GetNetwork: Could not find network save directory.");
+
+        GLOBAL_SAVE_PATH.cat(String("SavedNetworks") + dir::DIVIDER);
+        if (dir::dir_exists(GLOBAL_SAVE_PATH) == false)
+            dir::mkdir(GLOBAL_SAVE_PATH);
+
         static Network instance;
         return instance;
     }
@@ -30,7 +38,8 @@ public:
     Thread* GetThreadByID (const uint32_t id) const noexcept;
     Thread* GetThreadByTitle (const String& title) const;
     
-    const String& GetHomeDirectoryPath () const;
+    const String& GetCurrentNetworkPath () const;
+    const String& GetCurrentVoteTablePath () const;
 
     void OpenThread() const;
     void OpenPost() const;
@@ -39,29 +48,32 @@ public:
     void RegisterUser (const User& user);
     void AddThread (const Thread& thread);
 
-    void LoadNetwork (String& dir_path);
-    void CreateNewNetwork (String& dir_path);
+    void LoadNetwork (const String& networkName);
+    void CreateNewNetwork (const String& networkName);
     void SaveInCurrentPath () const;
-    void ExportToNewPath (String& export_path) const;
+    void ExportToNewPath (const String& networkName) const;
 
 public:
-    static String home_directory_path;
+    // The directory containing all networks. Has to be set externally
+    static String GLOBAL_SAVE_PATH;
+    
 
 private:
     Network() = default;
     Network(const Network& other) = delete;
     Network& operator=(const Network& other) = delete;
 
-    static bool fix_dir_path (String& path) noexcept;
-
 private:
-    static uint64_t currentUserCount;
-
     static User* CURRENTLY_LOGGED_IN_USER;
     static Thread* CURRENTLY_OPENED_THREAD;
     static Post* CURRENTLY_OPENED_POST;
 
 private:
+    // The path of the current network
+    String network_directory_path;
+    // The path of the "vote_tables" folder
+    String voting_directory_path;
+
     Vector<User> users;
     Vector<Thread> threads;
 

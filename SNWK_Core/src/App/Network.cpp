@@ -1,28 +1,37 @@
 #include <stdexcept>
 
 #include "../../include/snwk_lib.h"
+#include "../../include/Utils/Directory.h"
 
 #include "../../include/App/Network.h"
 
 // ---- STATIC VARIABLES ----
 
-uint64_t currentUserCount = 0;
+User* Network::CURRENTLY_LOGGED_IN_USER = nullptr;
 
-User* CURRENTLY_LOGGED_IN_USER = nullptr;
+Thread* Network::CURRENTLY_OPENED_THREAD = nullptr;
+Post* Network::CURRENTLY_OPENED_POST = nullptr;
 
-Thread* CURRENTLY_OPENED_THREAD = nullptr;
-Post* CURRENTLY_OPENED_POST = nullptr;
-
-// ---- STATIC METHODS ----
-
-
+String Network::GLOBAL_SAVE_PATH;
 
 // ---- LIFECYCLE ----
 
+void Network::SetGlobalSavePath (String path)
+{
+    if (!path)
+        throw std::invalid_argument("Network.SetGlobalSavePath: Invalid GLOBAL_SAVE_PATH.");
+
+    if (path.last() != dir::DIVIDER.first())
+        path.cat(dir::DIVIDER);
+
+    if (dir::dir_exists(path) == false)
+        throw std::invalid_argument("Network.SetGlobalSavePath: Invalid GLOBAL_SAVE_PATH.");
+
+    GLOBAL_SAVE_PATH = path;
+}
+
 Network::~Network()
 {
-    currentUserCount = 0;
-
     CURRENTLY_LOGGED_IN_USER = nullptr;
 
     CURRENTLY_OPENED_THREAD = nullptr;
@@ -38,7 +47,7 @@ User* Network::GetCurrentUser () const noexcept
 
 User* Network::GetUserByID (const uint32_t id) const noexcept
 {
-    return users.auto_search(User(id));
+    return users.binary_search(User(id));
 }
 
 User* Network::GetUserByName (const String& name) const noexcept
@@ -48,7 +57,7 @@ User* Network::GetUserByName (const String& name) const noexcept
 
 Thread* Network::GetThreadByID (const uint32_t id) const noexcept
 {
-    return threads.auto_search(id);
+    return threads.binary_search(id);
 }
 
 Thread* Network::GetThreadByTitle (const String& title) const
@@ -59,14 +68,56 @@ Thread* Network::GetThreadByTitle (const String& title) const
     return threads.basic_search(title);
 }
 
-const String& Network::GetHomeDirectoryPath () const
+const String& Network::GetCurrentNetworkPath () const
 {
-    return home_directory_path;
+    return network_directory_path;
+}
+
+const String& Network::GetCurrentVoteTablePath () const
+{
+    return voting_directory_path;
 }
 
 // ---- SETTERS ----
 
+void Network::CreateNewNetwork (const String& networkName)
+{
+    String networkDirectory = GLOBAL_SAVE_PATH + networkName + dir::DIVIDER;
+    //std::clog << networkDirectory << '\n';
 
+    try
+    {
+        if (dir::mkdir(networkDirectory) != 0)
+            throw std::runtime_error("Could not create network directory.");
+        
+        network_directory_path = networkDirectory;
+        voting_directory_path = networkDirectory + "vote_tables" + dir::DIVIDER;
+        
+        dir::mkdir(voting_directory_path);
+
+        snwk::SNWKFile<User> userFile;
+        userFile.create((networkDirectory + "users.snwk").c_str());
+        userFile.close();
+
+        snwk::SNWKFile<Comment> commentFile;
+        commentFile.create((networkDirectory + "comments.snwk").c_str());
+        commentFile.close();
+        
+        snwk::SNWKFile<Post> postFile;
+        postFile.create((networkDirectory + "posts.snwk").c_str());
+        postFile.close();
+
+        snwk::SNWKFile<Thread> threadFile;
+        threadFile.create((networkDirectory + "threads.snwk").c_str());
+        threadFile.close();
+    }
+    catch (...)
+    {
+        network_directory_path.clear();
+        voting_directory_path.clear();
+        throw;
+    }
+}
 
 // ---- LOAD & SAVE METHODS ----
 

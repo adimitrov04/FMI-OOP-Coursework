@@ -56,6 +56,7 @@ public:
     const uint64_t length () const noexcept;
     const char* c_str () const noexcept;
 
+    char first () const;
     char last () const;
 
     Vector<String> extract_words () const;

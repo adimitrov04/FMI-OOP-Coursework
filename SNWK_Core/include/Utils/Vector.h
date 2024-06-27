@@ -39,7 +39,6 @@ public:
     
     T* basic_search (const T& search_arg) const noexcept;
     T* binary_search (const T& search_arg) const;
-    T* auto_search (const T& search_arg) const;
     uint64_t count_repetitions (const T& search_arg) const;
     bool is_sorted () const noexcept;
     

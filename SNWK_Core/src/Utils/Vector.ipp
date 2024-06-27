@@ -135,21 +135,6 @@ T* Vector<T>::basic_search (const T& search_arg) const noexcept
 }
 
 /**
- * Search method, which optimizes searching by using different methods in different situations
- * 
- * @warning May invoke undefined behaviour if the template type's comparison operators
- * compare on multiple criteria at the same time. Use with caution.
- */
-template <typename T>
-T* Vector<T>::auto_search (const T& search_arg) const
-{
-    if (is_sorted())
-        return binary_search(search_arg);
-
-    return basic_search(search_arg);
-}
-
-/**
  * @param search_arg The element to look for, passed by value
  * 
  * @warning Function works properly ONLY when the vector is sorted. Undefined behaviour if not sorted.
