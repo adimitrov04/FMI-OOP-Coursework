@@ -26,12 +26,12 @@ public:
 
 public:
     Post& operator= (const Post& other);
-    bool operator== (const Post& other);
+    bool operator== (const Post& other) const;
     
-    bool operator> (const Post& other);
-    bool operator<= (const Post& other);
-    bool operator< (const Post& other);
-    bool operator>= (const Post& other);
+    bool operator> (const Post& other) const;
+    bool operator<= (const Post& other) const;
+    bool operator< (const Post& other) const;
+    bool operator>= (const Post& other) const;
 
 public:
     uint32_t GetParentThreadID () const noexcept;
@@ -40,6 +40,8 @@ public:
     const String& GetTitle () const noexcept;
     const String& GetContent () const noexcept;
     Comment* GetCommentByID (uint32_t id) const;
+
+    Post GetDeletedVersion () const;
 
     void SetTitle (const String& text);
     void SetContent (const String& text);
@@ -54,7 +56,9 @@ public:
 
 public:
     static const snwk::FourCC TYPE_FCC;
-    static const Post DELETED_POST;
+
+private:
+    Post(const Post& other);
 
 private:
     uint32_t parent_thread_id;

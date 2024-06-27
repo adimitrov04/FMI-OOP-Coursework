@@ -5,11 +5,15 @@
 
 #include "String.h"
 
+enum FilesystemID { UNIX, WINDOWS };
+
 namespace dir
 {
 
-bool dir_exists (const char* path) noexcept;
-int mkdir (const char* path);
+extern const String DIVIDER;
+
+bool dir_exists (const String& path) noexcept;
+int mkdir (const String& path);
 
 }
 

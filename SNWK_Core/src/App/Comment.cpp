@@ -7,10 +7,8 @@
 
 const snwk::FourCC Comment::TYPE_FCC = {'c', 'm', 'n', 't'};
 
-const Comment Comment::DELETED_COMMENT(0, 0, 0, 0 , "[deleted]", 0);
-
 //const String Comment::VOTE_TABLE_DIR = Network::home_directory_path + "comments/"; CHANGE WHEN NETWORK IS IMPLEMENTED
-const String Comment::VOTE_TABLE_DIR = "comments/";
+const String Comment::VOTE_TABLE_DIR = String("comments") + dir::DIVIDER;
 
 Vector<Comment> Comment::getEmptyVector()
 {
@@ -188,8 +186,8 @@ void Comment::Unvote (const User& voter, User& author)
 
 Comment Comment::GetDeletedVersion () const
 {
-    Comment deletedVer(DELETED_COMMENT);
-    deletedVer.SetID(comment_id);
+    Comment deletedVer(*this);
+    deletedVer.SetContent("[deleted]");
 
     return deletedVer;
 }
@@ -253,6 +251,22 @@ void Comment::Deserialize (std::fstream& file)
 }
 
 // ---- PRIVATE ----
+
+Comment::Comment (const Comment& other)
+: Comment()
+{
+    parent_thread_id = other.parent_thread_id;
+    parent_post_id = other.parent_post_id;
+    comment_id = other.comment_id;
+
+    author_id = other.author_id;
+    replying_to_id = other.replying_to_id;
+
+    content = other.content;
+
+    if (other.IsDeleted())
+        DeleteObject();
+}
 
 String Comment::generate_vote_table_filename() const
 {

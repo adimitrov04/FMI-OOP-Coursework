@@ -125,8 +125,7 @@ void VoteTable::Clear () noexcept
 
 VoteEntry* VoteTable::FindEntry (const uint32_t id) const noexcept
 {
-    VoteEntry findID(id);
-    return entries.binary_search(findID);
+    return entries.binary_search(VoteEntry(id));
 }
 
 void VoteTable::AddEntry (const VoteEntry& inEntry)

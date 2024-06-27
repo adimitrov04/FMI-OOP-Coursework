@@ -50,7 +50,7 @@ public:
 
     operator bool() const noexcept;
 
-    friend std::ostream& operator<< (std::ostream& out, const String& str);
+    friend std::ostream& operator<< (std::ostream& out, const String& str) noexcept;
     friend std::istream& operator>> (std::istream& in, String& str);
 
 public:
@@ -58,7 +58,7 @@ public:
     const uint64_t length () const noexcept;
     const char* c_str () const noexcept;
 
-    char last () const noexcept;
+    char last () const;
 
     Vector<String> extract_words () const;
     void print (std::ostream& out = std::cout) const noexcept;

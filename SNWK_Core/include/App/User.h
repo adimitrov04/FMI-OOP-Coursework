@@ -54,7 +54,6 @@ public:
 
 public:
     static const snwk::FourCC TYPE_FCC;
-    static const User DELETED_USER;
 
 private:
     User(const User& other);

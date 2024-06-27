@@ -61,7 +61,6 @@ private:
 
 public:
     static const snwk::FourCC TYPE_FCC;
-    static const Thread DELETED_THREAD;
 
 private:
     uint32_t thread_id;

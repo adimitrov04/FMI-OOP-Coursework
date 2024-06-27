@@ -6,8 +6,6 @@
 
 const snwk::FourCC Thread::TYPE_FCC = {'t', 'h', 'r', 'd'};
 
-const Thread Thread::DELETED_THREAD(0, 0, "[deleted]", Post::getEmptyVector());
-
 Vector<Thread> Thread::getEmptyVector ()
 {
     Vector<Thread> empty;
@@ -131,8 +129,8 @@ Post* Thread::GetPostByID (const uint32_t id) const
 
 Thread Thread::GetDeletedVersion () const
 {
-    Thread deletedVer(DELETED_THREAD);
-    deletedVer.SetID(thread_id);
+    Thread deletedVer(*this);
+    deletedVer.SetTitle("[deleted]");
 
     return deletedVer;
 }
@@ -203,4 +201,17 @@ void Thread::Deserialize (std::fstream& file)
 
     title.deserialize(file);
     check_file_state(file);
+}
+
+// ---- PRIVATE ----
+
+/**
+ * @warning This constructor does not copy the source's Post list
+ */
+Thread::Thread (const Thread& other)
+: Thread()
+{
+    thread_id = other.thread_id;
+    author_id = other.author_id;
+    title = other.title;
 }

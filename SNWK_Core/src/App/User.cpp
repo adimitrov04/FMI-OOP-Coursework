@@ -7,8 +7,6 @@
 
 const snwk::FourCC User::TYPE_FCC = {'u', 's', 'e', 'r'};
 
-const User User::DELETED_USER("[deleted]", "0", 0, 0);
-
 // ---- LIFECYCLE ----
 
 /**
@@ -129,8 +127,8 @@ int32_t User::GetScore () const noexcept
 
 User User::GetDeletedVersion () const
 {
-    User deletedVer(DELETED_USER);
-    deletedVer.SetID(user_id);
+    User deletedVer(*this);
+    deletedVer.SetName("[deleted]");
 
     return deletedVer;
 }
@@ -139,8 +137,8 @@ User User::GetDeletedVersion () const
 
 void User::SetName (const String& newName)
 {
-    if (!newName && newName != "[deleted]")
-        throw std::invalid_argument("User.SetName: Name cannot be empty or is invalid.");
+    if (!newName)
+        throw std::invalid_argument("User.SetName: Name cannot be empty.");
 
     username = newName;
 }

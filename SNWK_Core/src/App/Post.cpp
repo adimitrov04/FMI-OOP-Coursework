@@ -4,8 +4,6 @@
 
 const snwk::FourCC Post::TYPE_FCC = {'p', 'o', 's', 't'};
 
-const Post Post::DELETED_POST(0, 0, 0, "[deleted]", "", Comment::getEmptyVector());
-
 Vector<Post> Post::getEmptyVector()
 {
     Vector<Post> empty;
@@ -59,27 +57,27 @@ Post& Post::operator= (const Post& other)
     return *this;
 }
 
-bool Post::operator== (const Post& other)
+bool Post::operator== (const Post& other) const
 {
     return post_id == other.post_id;
 }
 
-bool Post::operator< (const Post& other)
+bool Post::operator< (const Post& other) const
 {
     return post_id < other.post_id;
 }
 
-bool Post::operator<= (const Post& other)
+bool Post::operator<= (const Post& other) const
 {
     return post_id <= other.post_id;
 }
 
-bool Post::operator> (const Post& other)
+bool Post::operator> (const Post& other) const
 {
     return post_id > other.post_id;
 }
 
-bool Post::operator>= (const Post& other)
+bool Post::operator>= (const Post& other) const
 {
     return post_id >= other.post_id;
 }
@@ -109,6 +107,15 @@ const String& Post::GetTitle () const noexcept
 const String& Post::GetContent () const noexcept
 {
     return content;
+}
+
+Post Post::GetDeletedVersion () const
+{
+    Post deletedVer(*this);
+    deletedVer.SetTitle("[deleted]");
+    deletedVer.content.clear();
+
+    return deletedVer;
 }
 
 // ---- SETTERS ----
@@ -184,4 +191,20 @@ void Post::Deserialize (std::fstream& file)
     
     content.deserialize(file);
     check_file_state(file);
+}
+
+// ---- PRIVATE ----
+
+/**
+ * @warning This constructor does not copy Comments!
+ */
+Post::Post(const Post& other)
+: Post()
+{
+    parent_thread_id = other.parent_thread_id;
+    post_id = other.post_id;
+    author_id = other.author_id;
+
+    title = other.title;
+    content = other.content;
 }

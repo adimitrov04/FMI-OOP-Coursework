@@ -62,10 +62,10 @@ public:
 
 public:
     static const snwk::FourCC TYPE_FCC;
-    static const Comment DELETED_COMMENT;
     static const String VOTE_TABLE_DIR;
 
 private:
+    Comment(const Comment& other);
     String generate_vote_table_filename() const;
 
 private:
