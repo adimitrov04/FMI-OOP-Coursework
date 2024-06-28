@@ -32,17 +32,20 @@ public:
 
 public:
     User* GetCurrentUser () const noexcept;
-    User* GetUserByID (const uint32_t id) const noexcept;
-    User* GetUserByName (const String& name) const noexcept;
+    User* GetUserByID (const uint64_t id) const noexcept;
+    User* GetUserByName (const String& name) noexcept;
     
-    Thread* GetThreadByID (const uint32_t id) const noexcept;
+    Thread* GetThreadByID (const uint64_t id) const noexcept;
     Thread* GetThreadByTitle (const String& title) const;
     
+    uint64_t GetCurrentTrueUserCount () const noexcept;
+    uint64_t GetCurrentTrueThreadCount () const noexcept;
+
     const String& GetCurrentNetworkPath () const;
     const String& GetCurrentVoteTablePath () const;
 
-    void OpenThread() const;
-    void OpenPost() const;
+    void OpenThread(const uint64_t id) const;
+    void OpenPost(const uint64_t id) const;
 
     void SetCurrentUser (User& setUser) const;
     void RegisterUser (const User& user);
@@ -67,7 +70,6 @@ private:
     bool load_threads (snwk::SNWKFile<Thread> &inThreadFile, snwk::SNWKFile<Post> &inPostFile, snwk::SNWKFile<Comment> &inCommentFile);
 
 private:
-    static uint64_t current_user_count;
 
     static User* CURRENTLY_LOGGED_IN_USER;
     static Thread* CURRENTLY_OPENED_THREAD;

@@ -39,13 +39,13 @@ Comment::Comment()
  * a comment base. To be used ONLY by internal Comment mehtods or for temporary objects when
  * searching for a Comment within a Vector.
  */
-Comment::Comment(const uint32_t id)
+Comment::Comment(const uint64_t id)
 : Comment()
 {
     SetID(id);
 }
 
-Comment::Comment(uint32_t setThreadID, uint32_t setPostID, uint32_t setID, uint32_t setAuthorID, const String& setContent, uint32_t setReplyID)
+Comment::Comment(uint64_t setThreadID, uint64_t setPostID, uint64_t setID, uint64_t setAuthorID, const String& setContent, uint64_t setReplyID)
 : Comment()
 {
     parent_thread_id = setThreadID;
@@ -114,54 +114,54 @@ const String& Comment::GetContent () const noexcept
     return content;
 }
 
-uint32_t Comment::GetAuthorID () const noexcept
+uint64_t Comment::GetAuthorID () const noexcept
 {
     return author_id;
 }
 
-uint32_t Comment::GetID () const noexcept
+uint64_t Comment::GetID () const noexcept
 {
     return comment_id;
 }
 
-uint32_t Comment::GetParentThreadID () const noexcept
+uint64_t Comment::GetParentThreadID () const noexcept
 {
     return parent_thread_id;
 }
 
-uint32_t Comment::GetParentPostID () const noexcept
+uint64_t Comment::GetParentPostID () const noexcept
 {
     return parent_post_id;
 }
 
-uint32_t Comment::GetReplyID () const noexcept
+uint64_t Comment::GetReplyID () const noexcept
 {
     return replying_to_id;
 }
 
 // ---- SETTERS ----
 
-void Comment::SetParentThreadID (const uint32_t id)
+void Comment::SetParentThreadID (const uint64_t id)
 {
     parent_thread_id = id;
 }
 
-void Comment::SetParentPostID (const uint32_t id)
+void Comment::SetParentPostID (const uint64_t id)
 {
     parent_post_id = id;
 }
 
-void Comment::SetID (const uint32_t id)
+void Comment::SetID (const uint64_t id)
 {
     comment_id = id;
 }
 
-void Comment::SetReplyID (const uint32_t id)
+void Comment::SetReplyID (const uint64_t id)
 {
     replying_to_id = id;
 }
 
-void Comment::SetAuthorID (const uint32_t id)
+void Comment::SetAuthorID (const uint64_t id)
 {
     author_id = id;
 }

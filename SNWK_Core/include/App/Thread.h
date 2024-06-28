@@ -21,9 +21,9 @@ class Thread : public AppElement
 
 public:
     Thread();
-    Thread(const uint32_t id);
+    Thread(const uint64_t id);
     Thread(const String& title);
-    Thread(uint32_t setID, uint32_t setAuthorID, const String& setTitle, Vector<Post>&& loadPosts);
+    Thread(uint64_t setID, uint64_t setAuthorID, const String& setTitle, Vector<Post>&& loadPosts);
 
     ~Thread() = default;
 
@@ -37,14 +37,16 @@ public:
     bool operator>= (const Thread& other) const noexcept;
 
 public:
-    uint32_t GetThreadID () const noexcept;
-    uint32_t GetAuthorID () const noexcept;
+    uint64_t GetThreadID () const noexcept;
+    uint64_t GetAuthorID () const noexcept;
     const String& GetTitle () const noexcept;
+    uint64_t GetPostCount () const noexcept;
+    uint64_t GetTruePostCount () const noexcept;
     
-    Post* GetPostByID (const uint32_t id) const;
+    Post* GetPostByID (const uint64_t id) const;
     Thread GetDeletedVersion () const;
 
-    void SetAuthorID (uint32_t setAuthorID);
+    void SetAuthorID (uint64_t setAuthorID);
     void SetTitle (const String& setTitle);
 
     void AddPost (const Post& post, snwk::SNWKFile<Post> &postDataFile);
@@ -58,14 +60,14 @@ public:
 
 private:
     Thread (const Thread& other);
-    void SetID (uint32_t setID);
+    void SetID (uint64_t setID);
 
 public:
     static const snwk::FourCC TYPE_FCC;
 
 private:
-    uint32_t thread_id;
-    uint32_t author_id;
+    uint64_t thread_id;
+    uint64_t author_id;
     
     String title;
     Vector<Post> post_list;

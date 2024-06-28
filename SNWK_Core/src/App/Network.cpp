@@ -7,8 +7,6 @@
 
 // ---- STATIC VARIABLES ----
 
-uint64_t current_user_count = 0;
-
 User* Network::CURRENTLY_LOGGED_IN_USER = nullptr;
 
 Thread* Network::CURRENTLY_OPENED_THREAD = nullptr;
@@ -47,17 +45,23 @@ User* Network::GetCurrentUser () const noexcept
     return Network::CURRENTLY_LOGGED_IN_USER;
 }
 
-User* Network::GetUserByID (const uint32_t id) const noexcept
+User* Network::GetUserByID (const uint64_t id) const noexcept
 {
     return users.binary_search(User(id));
 }
 
-User* Network::GetUserByName (const String& name) const noexcept
+User* Network::GetUserByName (const String& name) noexcept
 {
-    return users.basic_search(User(name));
+    for (uint64_t i = 0; i < users.size(); i++)
+    {
+        if (users[i].GetName() == name)
+            return users.at_ptr(i);
+    }
+
+    return nullptr;
 }
 
-Thread* Network::GetThreadByID (const uint32_t id) const noexcept
+Thread* Network::GetThreadByID (const uint64_t id) const noexcept
 {
     return threads.binary_search(id);
 }
@@ -68,6 +72,16 @@ Thread* Network::GetThreadByTitle (const String& title) const
         throw std::runtime_error("Network.GetThreadByTitle: Multiple threads have given title, use GetThreadByID.");
 
     return threads.basic_search(title);
+}
+
+uint64_t Network::GetCurrentTrueUserCount () const noexcept
+{
+    return users.size();
+}
+
+uint64_t Network::GetCurrentTrueThreadCount () const noexcept
+{
+    return threads.size();
 }
 
 const String& Network::GetCurrentNetworkPath () const
@@ -82,7 +96,29 @@ const String& Network::GetCurrentVoteTablePath () const
 
 // ---- SETTERS ----
 
+void Network::RegisterUser (const User& user)
+{
+    std::clog << "here\n";
+    if (GetUserByID(user.GetID()))
+        throw std::invalid_argument("Network.RegisterUser: Given ID already registered.");
+    
+    users.push_back(user);
 
+    snwk::SNWKFile<User> userFile;
+
+    try
+    {
+        userFile.open( (network_directory_path + "users.snwk").c_str() );
+        userFile.write_object(user);
+    }
+    catch (...)
+    {
+        users.pop_back();
+        userFile.close();
+
+        throw std::runtime_error("Network.RegisterUser: Error writing in userfile. No changes were made.");
+    }
+}
 
 // ---- LOAD & SAVE METHODS ----
 

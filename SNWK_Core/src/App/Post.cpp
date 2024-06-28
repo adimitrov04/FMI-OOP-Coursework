@@ -29,13 +29,13 @@ Post::Post()
  * a post base. To be used ONLY by internal Post mehtods or for temporary objects when
  * searching for a Post within a Vector.
  */
-Post::Post (const uint32_t id)
+Post::Post (const uint64_t id)
 : Post()
 {
     SetID(id);
 }
 
-Post::Post(uint32_t setThreadID, uint32_t setPostID, uint32_t setAuthorID, const String& setTitle, const String& setContent,
+Post::Post(uint64_t setThreadID, uint64_t setPostID, uint64_t setAuthorID, const String& setTitle, const String& setContent,
 Vector<Comment>&& loadComments)
 : Post()
 {
@@ -97,17 +97,17 @@ bool Post::operator>= (const Post& other) const
 
 // ---- GETTERS ----
 
-uint32_t Post::GetParentThreadID () const noexcept
+uint64_t Post::GetParentThreadID () const noexcept
 {
     return parent_thread_id;
 }
 
-uint32_t Post::GetPostID () const noexcept
+uint64_t Post::GetPostID () const noexcept
 {
     return post_id;
 }
 
-uint32_t Post::GetAuthorID () const noexcept
+uint64_t Post::GetAuthorID () const noexcept
 {
     return author_id;
 }
@@ -122,7 +122,25 @@ const String& Post::GetContent () const noexcept
     return content;
 }
 
-Comment* Post::GetCommentByID (uint32_t id) const
+uint64_t Post::GetCommentCount () const noexcept
+{
+    uint64_t count(0);
+
+    for (uint64_t i = 0; i < post_comments.size(); i++)
+    {
+        if (post_comments[i].IsDeleted() == false)
+            count++;
+    }
+
+    return count;
+}
+
+uint64_t Post::GetTrueCommentCount () const noexcept
+{
+    return post_comments.size();
+}
+
+Comment* Post::GetCommentByID (uint64_t id) const
 {
     return post_comments.binary_search(id);
 }
@@ -138,7 +156,7 @@ Post Post::GetDeletedVersion () const
 
 // ---- SETTERS ----
 
-void Post::SetID (const uint32_t id)
+void Post::SetID (const uint64_t id)
 {
     post_id = id;
 }

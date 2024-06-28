@@ -30,7 +30,7 @@ Thread::Thread()
  * a thread base. To be used ONLY by internal Thread mehtods or for temporary objects when
  * searching for a Thread within a Vector.
  */
-Thread::Thread(const uint32_t id)
+Thread::Thread(const uint64_t id)
 : Thread()
 {
     SetID(id);
@@ -48,7 +48,7 @@ Thread::Thread(const String& title)
     SetTitle(title);
 }
 
-Thread::Thread(uint32_t setID, uint32_t setAuthorID, const String& setTitle, Vector<Post>&& loadPosts)
+Thread::Thread(uint64_t setID, uint64_t setAuthorID, const String& setTitle, Vector<Post>&& loadPosts)
 : Thread()
 {
     SetID(setID);
@@ -104,12 +104,12 @@ bool Thread::operator>= (const Thread& other) const noexcept
 
 // ---- GETTERS ----
 
-uint32_t Thread::GetThreadID () const noexcept
+uint64_t Thread::GetThreadID () const noexcept
 {
     return thread_id;
 }
 
-uint32_t Thread::GetAuthorID () const noexcept
+uint64_t Thread::GetAuthorID () const noexcept
 {
     return author_id;
 }
@@ -119,10 +119,29 @@ const String& Thread::GetTitle () const noexcept
     return title;
 }
 
-Post* Thread::GetPostByID (const uint32_t id) const
+Post* Thread::GetPostByID (const uint64_t id) const
 {   
     return post_list.binary_search(id);
 }
+
+uint64_t Thread::GetPostCount () const noexcept
+{
+    uint64_t count(0);
+    
+    for (uint64_t i = 0; i < post_list.size(); i++)
+    {
+        if (post_list[i].IsDeleted() == false)
+            count++;
+    }
+
+    return count;
+}
+
+uint64_t Thread::GetTruePostCount () const noexcept
+{
+    return post_list.size();
+}
+
 
 Thread Thread::GetDeletedVersion () const
 {
@@ -134,12 +153,12 @@ Thread Thread::GetDeletedVersion () const
 
 // ---- SETTERS ----
 
-void Thread::SetID (uint32_t setID)
+void Thread::SetID (uint64_t setID)
 {
     thread_id = setID;
 }
 
-void Thread::SetAuthorID (uint32_t setAuthorID)
+void Thread::SetAuthorID (uint64_t setAuthorID)
 {
     author_id = setAuthorID;
 }

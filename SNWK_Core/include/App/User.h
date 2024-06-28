@@ -18,9 +18,9 @@ class User : public AppElement
 
 public:
     User();
-    User (const uint32_t searchID);
+    User (const uint64_t searchID);
     User (const String& searchName);
-    User(const String& setName, const String& setPass, const uint32_t setID, const int32_t setScore);
+    User(const String& setName, const String& setPass, const uint64_t setID, const int32_t setScore);
     ~User() = default;
 
 public:
@@ -34,7 +34,7 @@ public:
 
 public:
     const String& GetName () const noexcept;
-    uint32_t GetID () const noexcept;
+    uint64_t GetID () const noexcept;
     const String& GetPass () const noexcept;
     int32_t GetScore () const noexcept;
 
@@ -57,11 +57,11 @@ public:
 
 private:
     User(const User& other);
-    void SetID (uint32_t setID);
+    void SetID (uint64_t setID);
     void SetScore (int32_t setScore);
 
 private:
-    uint32_t user_id;
+    uint64_t user_id;
     String username;
     String password;
 

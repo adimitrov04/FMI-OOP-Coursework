@@ -21,7 +21,7 @@ class VoteEntry : public ISerializeable
 {
 
 public:
-    VoteEntry(const uint32_t setID = 0, const vote_values setVal = none) noexcept;
+    VoteEntry(const uint64_t setID = 0, const vote_values setVal = none) noexcept;
 
 public:
     vote_values GetValue () const;
@@ -43,7 +43,7 @@ public:
     static const snwk::FourCC TYPE_FCC;
 
 private:
-    uint32_t user_id;
+    uint64_t user_id;
     int8_t vote;
 
 };
@@ -61,9 +61,9 @@ public:
     uint64_t GetEntryCount () const noexcept;
     void Clear () noexcept;
 
-    VoteEntry* FindEntry (const uint32_t id) const noexcept;
+    VoteEntry* FindEntry (const uint64_t id) const noexcept;
     void AddEntry (const VoteEntry& inEntry);
-    void RemoveEntry (const uint32_t entryID);
+    void RemoveEntry (const uint64_t entryID);
 
 private:
     Vector<VoteEntry> entries;

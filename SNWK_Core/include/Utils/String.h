@@ -105,7 +105,7 @@ namespace string_utils
 namespace string
 {
 
-String parseToString (const uint32_t num);
+String parseToString (const uint64_t num);
 
 }
 

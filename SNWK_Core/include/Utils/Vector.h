@@ -34,6 +34,8 @@ public:
     const uint64_t capacity () const noexcept;
     T& at (const uint64_t index);
     const T& at (const uint64_t index) const;
+    T* at_ptr (const uint64_t index);
+    const T* at_ptr (const uint64_t index) const;
     T* front () const;
     T* back () const;
     

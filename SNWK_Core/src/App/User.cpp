@@ -28,7 +28,7 @@ User::User ()
  * a user base. To be used ONLY by internal User mehtods or for temporary objects when
  * searching for a user within a Vector.
  */
-User::User (const uint32_t search_id)
+User::User (const uint64_t search_id)
 : User()
 {
     SetID(search_id);
@@ -47,7 +47,7 @@ User::User (const String& search_name)
     SetName(search_name);
 }
 
-User::User(const String& setName, const String& setPass, const uint32_t setID, const int32_t setScore)
+User::User(const String& setName, const String& setPass, const uint64_t setID, const int32_t setScore)
 : User()
 {
     SetID(setID);
@@ -80,7 +80,7 @@ User& User::operator= (const User& other)
 
 bool User::operator== (const User& other) const noexcept
 {
-    return  user_id == other.user_id || username == other.GetName();
+    return  user_id == other.user_id;
 }
 
 bool User::operator< (const User& other) const noexcept
@@ -110,7 +110,7 @@ const String& User::GetName () const noexcept
     return username;
 }
 
-uint32_t User::GetID () const noexcept
+uint64_t User::GetID () const noexcept
 {
     return user_id;
 }
@@ -151,7 +151,7 @@ void User::SetPass (const String& newPass)
     password = newPass;
 }
 
-void User::SetID (uint32_t setID)
+void User::SetID (uint64_t setID)
 {
     user_id = setID;
 }

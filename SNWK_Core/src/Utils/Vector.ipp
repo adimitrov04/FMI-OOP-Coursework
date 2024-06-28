@@ -105,6 +105,30 @@ const T& Vector<T>::at (const uint64_t index) const
 }
 
 template <typename T>
+T* Vector<T>::at_ptr (const uint64_t index)
+{
+    if (size() == 0 || arr == nullptr)
+        throw std::logic_error("Vector.at: Array is empty.");
+    
+    if (index < 0 || index >= size())
+        throw std::invalid_argument("Vector.at: Given index outside of vector.");
+
+    return arr + index;
+}
+
+template <typename T>
+const T* Vector<T>::at_ptr (const uint64_t index) const
+{
+    if (size() == 0 || arr == nullptr)
+        throw std::logic_error("Vector.at: Array is empty.");
+    
+    if (index < 0 || index >= size())
+        throw std::invalid_argument("Vector.at: Given index outside of vector.");
+
+    return arr + index;
+}
+
+template <typename T>
 T* Vector<T>::front () const
 {
     if (!arr)

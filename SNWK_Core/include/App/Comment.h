@@ -20,9 +20,9 @@ class Comment : public AppElement, public virtual VoteableObject
 
 public:
     Comment();
-    Comment(const uint32_t id);
-    Comment(uint32_t setThreadID, uint32_t setPostID, uint32_t setID,
-            uint32_t setAuthorID, const String& setContent, uint32_t setReplyID);
+    Comment(const uint64_t id);
+    Comment(uint64_t setThreadID, uint64_t setPostID, uint64_t setID,
+            uint64_t setAuthorID, const String& setContent, uint64_t setReplyID);
     
     ~Comment() = default;
 
@@ -37,18 +37,18 @@ public:
 
 public:
     const String& GetContent () const noexcept;
-    uint32_t GetAuthorID () const noexcept;
-    uint32_t GetID () const noexcept;
-    uint32_t GetParentThreadID () const noexcept;
-    uint32_t GetParentPostID () const noexcept;
-    uint32_t GetReplyID () const noexcept;
+    uint64_t GetAuthorID () const noexcept;
+    uint64_t GetID () const noexcept;
+    uint64_t GetParentThreadID () const noexcept;
+    uint64_t GetParentPostID () const noexcept;
+    uint64_t GetReplyID () const noexcept;
     Comment GetDeletedVersion () const;
     
-    void SetParentThreadID (const uint32_t id);
-    void SetParentPostID (const uint32_t id);
-    void SetID (const uint32_t id);
-    void SetReplyID (const uint32_t id);
-    void SetAuthorID (const uint32_t id);
+    void SetParentThreadID (const uint64_t id);
+    void SetParentPostID (const uint64_t id);
+    void SetID (const uint64_t id);
+    void SetReplyID (const uint64_t id);
+    void SetAuthorID (const uint64_t id);
     void SetContent (const String& text);
 
     virtual void Upvote (const User& voter, User& author) override;
@@ -70,12 +70,12 @@ private:
     String generate_vote_table_filename() const;
 
 private:
-    uint32_t parent_thread_id;
-    uint32_t parent_post_id;
-    uint32_t comment_id;
+    uint64_t parent_thread_id;
+    uint64_t parent_post_id;
+    uint64_t comment_id;
 
-    uint32_t author_id;
-    uint32_t replying_to_id;
+    uint64_t author_id;
+    uint64_t replying_to_id;
 
     String content;
 

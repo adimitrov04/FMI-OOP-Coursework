@@ -603,7 +603,7 @@ void String::move (String&& other) noexcept
 
 // ---- EXTERNAL ----
 
-String string::parseToString (const uint32_t num)
+String string::parseToString (const uint64_t num)
 {
     const char ZERO_CHAR = '0';
     

@@ -6,7 +6,7 @@
 
 const snwk::FourCC VoteEntry::TYPE_FCC = {'v', 'o', 't', 'e'};
 
-VoteEntry::VoteEntry(const uint32_t setID, const vote_values setVal) noexcept
+VoteEntry::VoteEntry(const uint64_t setID, const vote_values setVal) noexcept
 : user_id(setID)
 , vote(setVal)
 {}
@@ -123,7 +123,7 @@ void VoteTable::Clear () noexcept
     entries.clear();
 }
 
-VoteEntry* VoteTable::FindEntry (const uint32_t id) const noexcept
+VoteEntry* VoteTable::FindEntry (const uint64_t id) const noexcept
 {
     return entries.binary_search(VoteEntry(id));
 }
@@ -136,7 +136,7 @@ void VoteTable::AddEntry (const VoteEntry& inEntry)
     entries.push_sorted(inEntry);
 }
 
-void VoteTable::RemoveEntry (const uint32_t entryID)
+void VoteTable::RemoveEntry (const uint64_t entryID)
 {
     if (FindEntry(entryID) == nullptr)
         throw std::invalid_argument("VoteTable.RemoveEntry: Given entry is not in table.");
