@@ -63,7 +63,12 @@ private:
     Network(const Network& other) = delete;
     Network& operator=(const Network& other) = delete;
 
+    bool load_users (snwk::SNWKFile<User> &inFile);
+    bool load_threads (snwk::SNWKFile<Thread> &inThreadFile, snwk::SNWKFile<Post> &inPostFile, snwk::SNWKFile<Comment> &inCommentFile);
+
 private:
+    static uint64_t current_user_count;
+
     static User* CURRENTLY_LOGGED_IN_USER;
     static Thread* CURRENTLY_OPENED_THREAD;
     static Post* CURRENTLY_OPENED_POST;

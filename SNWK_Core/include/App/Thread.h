@@ -48,6 +48,7 @@ public:
     void SetTitle (const String& setTitle);
 
     void AddPost (const Post& post, snwk::SNWKFile<Post> &postDataFile);
+    void AddPostNoWrite (const Post& post);
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;

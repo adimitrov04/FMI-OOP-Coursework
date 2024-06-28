@@ -22,6 +22,19 @@ Post::Post()
 , author_id(0)
 {}
 
+/**
+ * Search constructor for searching by ID.
+ * 
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a post base. To be used ONLY by internal Post mehtods or for temporary objects when
+ * searching for a Post within a Vector.
+ */
+Post::Post (const uint32_t id)
+: Post()
+{
+    SetID(id);
+}
+
 Post::Post(uint32_t setThreadID, uint32_t setPostID, uint32_t setAuthorID, const String& setTitle, const String& setContent,
 Vector<Comment>&& loadComments)
 : Post()
@@ -109,6 +122,11 @@ const String& Post::GetContent () const noexcept
     return content;
 }
 
+Comment* Post::GetCommentByID (uint32_t id) const
+{
+    return post_comments.binary_search(id);
+}
+
 Post Post::GetDeletedVersion () const
 {
     Post deletedVer(*this);
@@ -119,6 +137,11 @@ Post Post::GetDeletedVersion () const
 }
 
 // ---- SETTERS ----
+
+void Post::SetID (const uint32_t id)
+{
+    post_id = id;
+}
 
 void Post::SetTitle (const String& text)
 {
@@ -143,6 +166,11 @@ void Post::AddComment (const Comment& comment, snwk::SNWKFile<Comment> &commentD
         post_comments.pop_back();
         throw;
     }
+}
+
+void Post::AddCommentNoWrite (const Comment& comment)
+{
+    post_comments.push_back(comment);
 }
 
 // ---- SERIALIZATION ----
@@ -207,4 +235,7 @@ Post::Post(const Post& other)
 
     title = other.title;
     content = other.content;
+
+    if (other.IsDeleted())
+        DeleteObject();
 }

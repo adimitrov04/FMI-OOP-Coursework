@@ -20,6 +20,7 @@ class Comment : public AppElement, public virtual VoteableObject
 
 public:
     Comment();
+    Comment(const uint32_t id);
     Comment(uint32_t setThreadID, uint32_t setPostID, uint32_t setID,
             uint32_t setAuthorID, const String& setContent, uint32_t setReplyID);
     

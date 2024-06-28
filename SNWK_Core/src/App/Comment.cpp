@@ -32,6 +32,19 @@ Comment::Comment()
 , VoteableObject()
 {}
 
+/**
+ * Search constructor for searching by ID.
+ * 
+ * @warning Creates invalid object which may break a Network if it is pushed back into
+ * a comment base. To be used ONLY by internal Comment mehtods or for temporary objects when
+ * searching for a Comment within a Vector.
+ */
+Comment::Comment(const uint32_t id)
+: Comment()
+{
+    SetID(id);
+}
+
 Comment::Comment(uint32_t setThreadID, uint32_t setPostID, uint32_t setID, uint32_t setAuthorID, const String& setContent, uint32_t setReplyID)
 : Comment()
 {

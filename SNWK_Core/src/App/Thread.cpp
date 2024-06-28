@@ -120,11 +120,8 @@ const String& Thread::GetTitle () const noexcept
 }
 
 Post* Thread::GetPostByID (const uint32_t id) const
-{
-    Post search_arg(thread_id, id, 0, "", "", Comment::getEmptyVector());
-    
-    Post* result = post_list.binary_search(search_arg);   
-    return result;
+{   
+    return post_list.binary_search(id);
 }
 
 Thread Thread::GetDeletedVersion () const
@@ -165,6 +162,11 @@ void Thread::AddPost (const Post& post, snwk::SNWKFile<Post> &postDataFile)
         post_list.pop_back();
         throw;
     }
+}
+
+void Thread::AddPostNoWrite (const Post& post)
+{
+    post_list.push_back(post);
 }
 
 // ---- SERIALIZATION ----

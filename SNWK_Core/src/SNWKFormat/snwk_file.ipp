@@ -32,7 +32,7 @@ bool snwk::SNWKFile<ObjectType>::operator! () noexcept
 template <class ObjectType>
 void snwk::SNWKFile<ObjectType>::create (const char* file_path)
 {
-    file_stream.open(file_path, std::ios_base::out | std::ios_base::in | std::ios_base::trunc | std::ios_base::binary);
+    file_stream.open(file_path, std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
     if (!file_stream)
         throw std::runtime_error("SNWKFile.create: File could not be created.");
 
@@ -43,7 +43,6 @@ void snwk::SNWKFile<ObjectType>::create (const char* file_path)
 template <class ObjectType>
 void snwk::SNWKFile<ObjectType>::open (const char* file_path)
 {
-    // TODO make this function check if file exists and throw appropriately
     file_stream.open(file_path, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
     if (!file_stream)
         throw std::invalid_argument("SNWKFile.ctor: File could not be opened or does not exist.");

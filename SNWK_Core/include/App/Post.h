@@ -19,6 +19,7 @@ class Post : public AppElement
 
 public:
     Post();
+    Post(const uint32_t id);
     Post(uint32_t setThreadID, uint32_t setPostID, uint32_t setAuthorID,
          const String& setTitle, const String& setContent, Vector<Comment>&& loadComments);
 
@@ -39,6 +40,7 @@ public:
     uint32_t GetAuthorID () const noexcept;
     const String& GetTitle () const noexcept;
     const String& GetContent () const noexcept;
+
     Comment* GetCommentByID (uint32_t id) const;
 
     Post GetDeletedVersion () const;
@@ -47,6 +49,7 @@ public:
     void SetContent (const String& text);
 
     void AddComment (const Comment& comment, snwk::SNWKFile<Comment> &commentDataFile);
+    void AddCommentNoWrite (const Comment& comment);
 
     virtual void Serialize (std::fstream& file) const override;
     virtual void Deserialize (std::fstream& file) override;
@@ -59,6 +62,7 @@ public:
 
 private:
     Post(const Post& other);
+    void SetID (const uint32_t id);
 
 private:
     uint32_t parent_thread_id;
