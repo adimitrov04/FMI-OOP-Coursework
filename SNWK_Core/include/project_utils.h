@@ -4,8 +4,10 @@
 #define __SNWK_PROJECT_UTILS_LIB__
 
 #include "Utils/Vector.h"
-#include "Utils/String.h"
+#include "Utils/PMVector.h"
 #include "Utils/Sort.h"
+
+#include "Utils/String.h"
 
 #include "Utils/Directory.h"
 
