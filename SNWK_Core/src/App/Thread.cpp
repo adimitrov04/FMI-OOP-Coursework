@@ -224,15 +224,19 @@ void Thread::Deserialize (std::fstream& file)
     check_file_state(file);
 }
 
+AppElement* Thread::clone () const
+{
+    return new Thread(*this);
+}
+
 // ---- PRIVATE ----
 
-/**
- * @warning This constructor does not copy the source's Post list
- */
 Thread::Thread (const Thread& other)
 : Thread()
 {
     thread_id = other.thread_id;
     author_id = other.author_id;
     title = other.title;
+
+    post_list = other.post_list;
 }

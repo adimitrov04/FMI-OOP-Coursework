@@ -4,6 +4,7 @@
 #define __APP_ELEMENT_BASE__
 
 #include "ISerializeable.h"
+#include "../../Utils/ICLoneable.h"
 
 /**
  * An abstraction to be implemented by all app elements in the network. Enforces
@@ -13,7 +14,7 @@
  * object defined to work properly, since deleting an object simply sets
  * `is_deleted_object` to `true`.
  */
-class AppElement : public ISerializeable
+class AppElement : public ISerializeable, public ICLoneable<AppElement>
 {
 
 public:

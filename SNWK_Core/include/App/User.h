@@ -47,6 +47,7 @@ public:
     virtual void Deserialize (std::fstream& file) override;
 
     using AppElement::DeleteObject;
+    virtual AppElement* clone () const override;
     User GetDeletedVersion () const;
 
     // For testing, remove later

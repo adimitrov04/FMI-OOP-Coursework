@@ -59,6 +59,7 @@ public:
     virtual void Deserialize (std::fstream& file) override;
 
     using AppElement::DeleteObject;
+    virtual AppElement* clone () const override;
     static Vector<Comment> getEmptyVector();
 
 public:

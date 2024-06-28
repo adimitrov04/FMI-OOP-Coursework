@@ -205,6 +205,11 @@ Comment Comment::GetDeletedVersion () const
     return deletedVer;
 }
 
+AppElement* Comment::clone () const
+{
+    return new Comment(*this);
+}
+
 // ---- SERIALIZATION ----
 
 void Comment::Serialize (std::fstream& file) const

@@ -239,11 +239,13 @@ void Post::Deserialize (std::fstream& file)
     check_file_state(file);
 }
 
+AppElement* Post::clone () const
+{
+    return new Post(*this);
+}
+
 // ---- PRIVATE ----
 
-/**
- * @warning This constructor does not copy Comments!
- */
 Post::Post(const Post& other)
 : Post()
 {
@@ -253,6 +255,8 @@ Post::Post(const Post& other)
 
     title = other.title;
     content = other.content;
+
+    post_comments = other.post_comments;
 
     if (other.IsDeleted())
         DeleteObject();

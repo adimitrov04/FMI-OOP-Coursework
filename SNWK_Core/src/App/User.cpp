@@ -224,6 +224,11 @@ void User::Deserialize (std::fstream& file)
     check_file_state(file);
 }
 
+AppElement* User::clone () const
+{
+    return new User(*this);
+}
+
 void User::printinfo (std::ostream& out) const
 {
     if (IsDeleted())
